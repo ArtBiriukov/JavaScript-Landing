@@ -1,5 +1,7 @@
 /* eslint-disable indent */
 window.addEventListener('DOMContentLoaded', () => {
+
+  //таймер
   const countTimer = deadline => {
     const timerHours = document.getElementById('timer-hours'),
           timerMinutes = document.getElementById('timer-minutes'),
@@ -48,5 +50,37 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   countTimer('23 August  2021');
+
+  //меню
+  const toggleMenu = () => {
+    const menuBtn = document.querySelector('.menu'),
+    menu = document.querySelector('menu'),
+    menuItem = menu.querySelectorAll('ul>li'),
+    closeBtn = document.querySelector('.close-btn');
+
+    const handlerMenu = () => {
+      menu.classList.toggle('active-menu');
+    };
+
+    menuBtn.addEventListener('click', handlerMenu);
+    closeBtn.addEventListener('click', handlerMenu);
+    menuItem.forEach(item => item.addEventListener('click', handlerMenu));
+  };
+
+  toggleMenu();
+
+  //Модальное окно
+
+  const popUp = () => {
+    const popupBtn = document.querySelectorAll('.popup-btn'),
+    popupCloseBtn = document.querySelector('.popup-close'),
+    popup = document.querySelector('.popup');
+
+    popupBtn.forEach(item => item.addEventListener('click', () => popup.style.display = 'block'));
+    popupCloseBtn.addEventListener('click', () => popup.style.display = 'none');
+  };
+
+  popUp();
+
 });
 
