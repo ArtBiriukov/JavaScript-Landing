@@ -80,16 +80,47 @@ window.addEventListener('DOMContentLoaded', () => {
     // popupBtn.forEach(item => item.addEventListener('click', () => popup.style.display = 'block'));
 
     const animationPopup = () => {
+
       if (document.documentElement.clientWidth <= 768) {
         popup.style.display = 'block';
+
       } else {
-          const start = Date.now();
-          const timer = setInterval(() => {
-            const timePass = Date.now() - start;
-            popup.style.display = 'block';
-            popupContent.style.left = timePass / 90 + '%';
-            if (timePass > 3500) clearInterval(timer);
-          }, 25);
+
+        let start = null;
+
+        const step = timestamp => {
+
+          console.log(timestamp);
+
+          if (!start) start = timestamp;
+          const progress = timestamp - start;
+
+          popup.style.display = 'block';
+          popupContent.style.left = progress / 6 + '%';
+          if (progress < 240) {
+            window.requestAnimationFrame(step);
+          }
+        };
+
+        window.requestAnimationFrame(step);
+
+
+
+
+
+
+
+          // const start = Date.now();
+
+          // const timer = setInterval(() => {
+          //   const timePassed = Date.now() - start;
+
+          //   popup.style.display = 'block';
+          //   popupContent.style.left = progress / 6 + '%';
+
+          //   if (timePassed > 300) clearInterval(timer);
+
+          // }, 20);
         }
       };
 
@@ -97,10 +128,12 @@ window.addEventListener('DOMContentLoaded', () => {
       item.addEventListener('click', animationPopup);
     });
 
-    popupCloseBtn.addEventListener('click', () => popup.style.display = 'none');
+    popupCloseBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+      popupContent.style.left = '0';
+    });
   };
 
   popUp();
 
 });
-
