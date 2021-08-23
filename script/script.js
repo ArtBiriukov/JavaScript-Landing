@@ -74,13 +74,66 @@ window.addEventListener('DOMContentLoaded', () => {
   const popUp = () => {
     const popupBtn = document.querySelectorAll('.popup-btn'),
     popupCloseBtn = document.querySelector('.popup-close'),
-    popup = document.querySelector('.popup');
+    popup = document.querySelector('.popup'),
+    popupContent = document.querySelector('.popup-content');
 
-    popupBtn.forEach(item => item.addEventListener('click', () => popup.style.display = 'block'));
-    popupCloseBtn.addEventListener('click', () => popup.style.display = 'none');
+    // popupBtn.forEach(item => item.addEventListener('click', () => popup.style.display = 'block'));
+
+    const animationPopup = () => {
+
+      if (document.documentElement.clientWidth <= 768) {
+        popup.style.display = 'block';
+
+      } else {
+
+        let start = null;
+
+        const step = timestamp => {
+
+          console.log(timestamp);
+
+          if (!start) start = timestamp;
+          const progress = timestamp - start;
+
+          popup.style.display = 'block';
+          popupContent.style.left = progress / 6 + '%';
+          if (progress < 240) {
+            window.requestAnimationFrame(step);
+          }
+        };
+
+        window.requestAnimationFrame(step);
+
+
+
+
+
+
+
+          // const start = Date.now();
+
+          // const timer = setInterval(() => {
+          //   const timePassed = Date.now() - start;
+
+          //   popup.style.display = 'block';
+          //   popupContent.style.left = progress / 6 + '%';
+
+          //   if (timePassed > 300) clearInterval(timer);
+
+          // }, 20);
+        }
+      };
+
+    popupBtn.forEach(item => {
+      item.addEventListener('click', animationPopup);
+    });
+
+    popupCloseBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+      popupContent.style.left = '0';
+    });
   };
 
   popUp();
 
 });
-
