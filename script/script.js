@@ -2,8 +2,7 @@
 window.addEventListener('DOMContentLoaded', () => {
 
   //Глобальные элементы
-  const menu = document.querySelector('menu'),
-        menuItems = menu.querySelectorAll('ul>li');
+  const menu = document.querySelector('menu');
 
   //таймер
   const countTimer = deadline => {
@@ -53,20 +52,26 @@ window.addEventListener('DOMContentLoaded', () => {
     updateClock();
   };
 
-  countTimer('23 August  2021');
+  countTimer('23 September  2021');
 
   //меню
   const toggleMenu = () => {
-    const menuBtn = document.querySelector('.menu'),
-    closeBtn = document.querySelector('.close-btn');
+    const menuBtn = document.querySelector('.menu');
 
     const handlerMenu = () => {
       menu.classList.toggle('active-menu');
     };
 
     menuBtn.addEventListener('click', handlerMenu);
-    closeBtn.addEventListener('click', handlerMenu);
-    menuItems.forEach(item => item.addEventListener('click', handlerMenu));
+
+    menu.addEventListener('click', event => {
+      if (event.target.matches('ul>li>a')) {
+        handlerMenu();
+      } else if (event.target.matches('.close-btn')) {
+        handlerMenu();
+      }
+    });
+
   };
 
   toggleMenu();
@@ -137,5 +142,46 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   btnScroll.addEventListener('click', scrollEvent);
+
+  //табы
+
+  const tabs = () => {
+    const tabHeader = document.querySelector('.service-header'),
+          tab = tabHeader.querySelectorAll('.service-header-tab'),
+          tabContent = document.querySelectorAll('.service-tab');
+
+    const toggleTabContent = index => {
+      for (let i = 0; i < tabContent.length; i++) {
+        if (index === i) {
+          tab[i].classList.add('active');
+          tabContent[i].classList.remove('d-none');
+        } else {
+          tab[i].classList.remove('active');
+          tabContent[i].classList.add('d-none');
+        }
+      }
+    };
+
+    tabHeader.addEventListener('click', e => {
+      let target = e.target;
+      while (target !== tabHeader) {
+
+        if (target.classList.contains('service-header-tab')) {
+
+          tab.forEach((item, ind) => {
+
+            if (item === target) {
+              toggleTabContent(ind);
+            }
+
+          });
+          return;
+        }
+        target = target.parentNode;
+      }
+    });
+  };
+
+  tabs();
 
 });
