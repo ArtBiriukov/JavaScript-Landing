@@ -1,6 +1,10 @@
 /* eslint-disable indent */
 window.addEventListener('DOMContentLoaded', () => {
 
+  //Глобальные элементы
+  const menu = document.querySelector('menu'),
+        menuItems = menu.querySelectorAll('ul>li');
+
   //таймер
   const countTimer = deadline => {
     const timerHours = document.getElementById('timer-hours'),
@@ -54,8 +58,6 @@ window.addEventListener('DOMContentLoaded', () => {
   //меню
   const toggleMenu = () => {
     const menuBtn = document.querySelector('.menu'),
-    menu = document.querySelector('menu'),
-    menuItem = menu.querySelectorAll('ul>li'),
     closeBtn = document.querySelector('.close-btn');
 
     const handlerMenu = () => {
@@ -64,7 +66,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     menuBtn.addEventListener('click', handlerMenu);
     closeBtn.addEventListener('click', handlerMenu);
-    menuItem.forEach(item => item.addEventListener('click', handlerMenu));
+    menuItems.forEach(item => item.addEventListener('click', handlerMenu));
   };
 
   toggleMenu();
@@ -90,8 +92,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         const step = timestamp => {
 
-          console.log(timestamp);
-
           if (!start) start = timestamp;
           const progress = timestamp - start;
 
@@ -104,23 +104,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         window.requestAnimationFrame(step);
 
-
-
-
-
-
-
-          // const start = Date.now();
-
-          // const timer = setInterval(() => {
-          //   const timePassed = Date.now() - start;
-
-          //   popup.style.display = 'block';
-          //   popupContent.style.left = progress / 6 + '%';
-
-          //   if (timePassed > 300) clearInterval(timer);
-
-          // }, 20);
         }
       };
 
@@ -135,5 +118,24 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   popUp();
+
+  //скрол
+  const menuLinks = menu.querySelectorAll('ul>li>a'),
+        btnScroll = document.querySelector('a[href="#service-block"]');
+
+  const scrollEvent = event => {
+    event.preventDefault();
+    const itemHash = event.currentTarget.getAttribute('href');
+    document.querySelector('' + itemHash).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+  };
+
+  menuLinks.forEach(menuLink => {
+    menuLink.addEventListener('click', scrollEvent);
+  });
+
+  btnScroll.addEventListener('click', scrollEvent);
 
 });
