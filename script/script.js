@@ -138,6 +138,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
   btnScroll.addEventListener('click', scrollEvent);
 
-
-
 });
