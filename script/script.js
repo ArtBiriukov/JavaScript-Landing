@@ -80,17 +80,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const popUp = () => {
     const popupBtn = document.querySelectorAll('.popup-btn'),
-    popupCloseBtn = document.querySelector('.popup-close'),
     popup = document.querySelector('.popup'),
     popupContent = document.querySelector('.popup-content');
 
-    // popupBtn.forEach(item => item.addEventListener('click', () => popup.style.display = 'block'));
-
     const animationPopup = () => {
-
       if (document.documentElement.clientWidth <= 768) {
         popup.style.display = 'block';
-
       } else {
 
         let start = null;
@@ -109,16 +104,28 @@ window.addEventListener('DOMContentLoaded', () => {
 
         window.requestAnimationFrame(step);
 
-        }
-      };
+      }
+    };
 
     popupBtn.forEach(item => {
       item.addEventListener('click', animationPopup);
     });
 
-    popupCloseBtn.addEventListener('click', () => {
-      popup.style.display = 'none';
-      popupContent.style.left = '0';
+    popup.addEventListener('click', (event) => {
+      let target = event.target;
+
+      if (target.classList.contains('popup-close')) {
+        popup.style.display = 'none';
+        popupContent.style.left = '0';
+      } else {
+
+        target = target.closest('.popup-content');
+
+        if (!target) {
+          popup.style.display = 'none';
+          popupContent.style.left = '0';
+        }
+      }
     });
   };
 
@@ -164,21 +171,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
     tabHeader.addEventListener('click', e => {
       let target = e.target;
-      while (target !== tabHeader) {
+          target = target.closest('.service-header-tab');
 
-        if (target.classList.contains('service-header-tab')) {
-
+        if (target) {
           tab.forEach((item, ind) => {
-
             if (item === target) {
               toggleTabContent(ind);
             }
-
           });
-          return;
         }
-        target = target.parentNode;
-      }
     });
   };
 
