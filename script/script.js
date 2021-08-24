@@ -183,10 +183,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
   tabs();
 
+  //Слайдеры
+  const sliders = document.querySelectorAll('.portfolio-item');
+  //Script DOT
+  const addDot = () => {
+    const dotContainer = document.querySelector('.portfolio-dots');
+
+    dotContainer.insertAdjacentHTML('beforeend', '<li class="dot dot-active"></li>');
+
+    for (let i = 0; i < sliders.length - 1; i++) {
+      dotContainer.insertAdjacentHTML('beforeend', '<li class="dot"></li>');
+    }
+
+  };
+
+  addDot();
+
   //слайдер
   const slider = () => {
-    const sliders = document.querySelectorAll('.portfolio-item'),
-          dot = document.querySelectorAll('.dot'),
+    const dot = document.querySelectorAll('.dot'),
           sliderContent = document.querySelector('.portfolio-content');
 
     let currentSlide = 0,
