@@ -62,22 +62,30 @@ window.addEventListener('DOMContentLoaded', () => {
       menu.classList.toggle('active-menu');
     };
 
-    menuBtn.addEventListener('click', handlerMenu);
+    document.addEventListener('click', event => {
+      let target = event.target;
 
-    menu.addEventListener('click', event => {
-      if (event.target.matches('ul>li>a')) {
+      if (target.matches('ul>li>a, .close-btn') || target.closest('.menu')) {
         handlerMenu();
-      } else if (event.target.matches('.close-btn')) {
-        handlerMenu();
+      } else {
+
+        target = target.closest('menu');
+        console.log(target);
+        
+
+        if (!target && menu.classList.contains('active-menu')) {
+          handlerMenu();
+        }
+
       }
-    });
+
+    },);
 
   };
 
   toggleMenu();
 
   //Модальное окно
-
   const popUp = () => {
     const popupBtn = document.querySelectorAll('.popup-btn'),
     popup = document.querySelector('.popup'),
@@ -120,7 +128,6 @@ window.addEventListener('DOMContentLoaded', () => {
       } else {
 
         target = target.closest('.popup-content');
-
         if (!target) {
           popup.style.display = 'none';
           popupContent.style.left = '0';
@@ -151,7 +158,6 @@ window.addEventListener('DOMContentLoaded', () => {
   btnScroll.addEventListener('click', scrollEvent);
 
   //табы
-
   const tabs = () => {
     const tabHeader = document.querySelector('.service-header'),
           tab = tabHeader.querySelectorAll('.service-header-tab'),
