@@ -70,9 +70,6 @@ window.addEventListener('DOMContentLoaded', () => {
       } else {
 
         target = target.closest('menu');
-        console.log(target);
-        
-
         if (!target && menu.classList.contains('active-menu')) {
           handlerMenu();
         }
