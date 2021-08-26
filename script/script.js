@@ -7,28 +7,43 @@ window.addEventListener('DOMContentLoaded', () => {
   //таймер
   const countTimer = deadline => {
     const timerHours = document.getElementById('timer-hours'),
-          timerMinutes = document.getElementById('timer-minutes'),
-          timerSeconds = document.getElementById('timer-seconds');
+      timerMinutes = document.getElementById('timer-minutes'),
+      timerSeconds = document.getElementById('timer-seconds');
 
     const getTimeRemaining = () => {
       const dateStop = new Date(deadline).getTime(),
-            dateNow = new Date().getTime(),
-            timeRemaining = (dateStop - dateNow) / 1000,
+        dateNow = new Date().getTime(),
+        timeRemaining = (dateStop - dateNow) / 1000,
 
         seconds = Math.floor(timeRemaining % 60),
         minutes = Math.floor((timeRemaining / 60) % 60),
         hours = Math.floor(timeRemaining / 3600);
 
       if (timeRemaining > 0) {
-        return { timeRemaining, hours, minutes, seconds };
+        return {
+          timeRemaining,
+          hours,
+          minutes,
+          seconds
+        };
       } else {
-        return { timeRemaining: 0, hours: 0, minutes: 0, seconds: 0 };
+        return {
+          timeRemaining: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0
+        };
       }
     };
 
     const updateClock = () => {
 
-      const { hours, minutes, seconds, timeRemaining } = getTimeRemaining();
+      const {
+        hours,
+        minutes,
+        seconds,
+        timeRemaining
+      } = getTimeRemaining();
 
       const checkZero = itemTime => {
         if (itemTime < 10) {
@@ -56,7 +71,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //меню
   const toggleMenu = () => {
-    const menuBtn = document.querySelector('.menu');
 
     const handlerMenu = () => {
       menu.classList.toggle('active-menu');
@@ -73,11 +87,8 @@ window.addEventListener('DOMContentLoaded', () => {
         if (!target && menu.classList.contains('active-menu')) {
           handlerMenu();
         }
-
       }
-
-    },);
-
+    });
   };
 
   toggleMenu();
@@ -85,8 +96,8 @@ window.addEventListener('DOMContentLoaded', () => {
   //Модальное окно
   const popUp = () => {
     const popupBtn = document.querySelectorAll('.popup-btn'),
-    popup = document.querySelector('.popup'),
-    popupContent = document.querySelector('.popup-content');
+      popup = document.querySelector('.popup'),
+      popupContent = document.querySelector('.popup-content');
 
     const animationPopup = () => {
       if (document.documentElement.clientWidth <= 768) {
@@ -137,15 +148,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //скрол
   const menuLinks = menu.querySelectorAll('ul>li>a'),
-        btnScroll = document.querySelector('a[href="#service-block"]');
+    btnScroll = document.querySelector('a[href="#service-block"]');
 
   const scrollEvent = event => {
     event.preventDefault();
     const itemHash = event.currentTarget.getAttribute('href');
     document.querySelector('' + itemHash).scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+      behavior: 'smooth',
+      block: 'start'
+    });
   };
 
   menuLinks.forEach(menuLink => {
@@ -157,8 +168,8 @@ window.addEventListener('DOMContentLoaded', () => {
   //табы
   const tabs = () => {
     const tabHeader = document.querySelector('.service-header'),
-          tab = tabHeader.querySelectorAll('.service-header-tab'),
-          tabContent = document.querySelectorAll('.service-tab');
+      tab = tabHeader.querySelectorAll('.service-header-tab'),
+      tabContent = document.querySelectorAll('.service-tab');
 
     const toggleTabContent = index => {
       for (let i = 0; i < tabContent.length; i++) {
@@ -174,15 +185,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
     tabHeader.addEventListener('click', e => {
       let target = e.target;
-          target = target.closest('.service-header-tab');
+      target = target.closest('.service-header-tab');
 
-        if (target) {
-          tab.forEach((item, ind) => {
-            if (item === target) {
-              toggleTabContent(ind);
-            }
-          });
-        }
+      if (target) {
+        tab.forEach((item, ind) => {
+          if (item === target) {
+            toggleTabContent(ind);
+          }
+        });
+      }
     });
   };
 
@@ -207,10 +218,10 @@ window.addEventListener('DOMContentLoaded', () => {
   //слайдер
   const slider = () => {
     const dot = document.querySelectorAll('.dot'),
-          sliderContent = document.querySelector('.portfolio-content');
+      sliderContent = document.querySelector('.portfolio-content');
 
     let currentSlide = 0,
-        interval;
+      interval;
 
     const prevSlide = (item, ind, strClass) => {
       item[ind].classList.remove(strClass);
@@ -225,9 +236,11 @@ window.addEventListener('DOMContentLoaded', () => {
       prevSlide(sliders, currentSlide, 'portfolio-item-active');
       prevSlide(dot, currentSlide, 'dot-active');
       currentSlide++;
-        if (currentSlide >= sliders.length) {
-          currentSlide = 0;
-        }
+
+      if (currentSlide >= sliders.length) {
+        currentSlide = 0;
+      }
+
       nextSlide(sliders, currentSlide, 'portfolio-item-active');
       nextSlide(dot, currentSlide, 'dot-active');
     };
@@ -242,7 +255,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     sliderContent.addEventListener('click', (event) => {
       event.preventDefault();
-      let target = event.target;
+      const target = event.target;
 
       if (!target.matches('.portfolio-btn, .dot')) {
         return;
