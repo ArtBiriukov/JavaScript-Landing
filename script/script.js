@@ -306,4 +306,59 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   slider();
+
+  //Атрибуты у фото
+  const commandPhoto = document.querySelectorAll('.command__photo');
+
+  commandPhoto.forEach((photo, ind) => {
+
+    photo.addEventListener('mouseenter', event => {
+      if (event.target === commandPhoto[ind]) {
+        event.target.dataset.firstImg = commandPhoto[ind].src;
+        commandPhoto[ind].src = event.target.dataset.img;
+      }
+    });
+
+    photo.addEventListener('mouseout', event => {
+      if (event.target === commandPhoto[ind]) {
+        commandPhoto[ind].src = event.target.dataset.firstImg;
+      }
+    });
+
+  });
+
+  //Регулярки
+
+  const calcBlock = document.querySelector('.calc-block'),
+        inputCalc = calcBlock.querySelectorAll('input'),
+        form2footer = document.getElementById('form2'),
+        inputFooter = form2footer.querySelectorAll('input');
+
+  inputCalc.forEach(item => {
+    const checkValue = () => {
+      item.value = item.value.replace(/\D/g, '');
+    };
+    item.addEventListener('input', checkValue);
+  });
+
+  inputFooter.forEach(item => {
+
+    const checkFilds = () => {
+      if (item.id === 'form2-name' || item.id === 'form2-message') {
+        const regExpText = /[^А-Яа-яёЁ -]/g;
+        item.value = item.value.replace(regExpText, '');
+      } else if (item.id === 'form2-email') {
+        const regExpEmail = /[^\w@\-\.`\*'!]/g;
+        item.value = item.value.replace(regExpEmail, '');
+      } else if (item.id === 'form2-phone') {
+        const regExpPhone = /[^\d\(\)\-+]/g;
+        item.value = item.value.replace(regExpPhone, '');
+      }
+    };
+
+    item.addEventListener('input', checkFilds);
+
+  });
+
+
 });
