@@ -336,7 +336,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   inputCalc.forEach(item => {
     const checkValue = () => {
-      item.value = item.value.replace(/\D/g, '');
+      item.value = item.value.replace(/[^\d]/g, '');
     };
     item.addEventListener('input', checkValue);
   });
