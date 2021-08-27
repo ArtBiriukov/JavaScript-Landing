@@ -328,7 +328,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   //Регулярки
-
   const calcBlock = document.querySelector('.calc-block'),
         inputCalc = calcBlock.querySelectorAll('input'),
         form2footer = document.getElementById('form2'),
@@ -344,21 +343,77 @@ window.addEventListener('DOMContentLoaded', () => {
   inputFooter.forEach(item => {
 
     const checkFilds = () => {
+      const regExpText = /[^А-Яа-яёЁ -]/g,
+            regExpEmail = /[^\w@\-\.`\*'!]/g,
+            regExpPhone = /[^\d\(\)\-+]/g;
+
       if (item.id === 'form2-name' || item.id === 'form2-message') {
-        const regExpText = /[^А-Яа-яёЁ -]/g;
         item.value = item.value.replace(regExpText, '');
       } else if (item.id === 'form2-email') {
-        const regExpEmail = /[^\w@\-\.`\*'!]/g;
         item.value = item.value.replace(regExpEmail, '');
       } else if (item.id === 'form2-phone') {
-        const regExpPhone = /[^\d\(\)\-+]/g;
         item.value = item.value.replace(regExpPhone, '');
       }
     };
 
+    const rebildFilds = () => {
+      const regExpTextUp = /( |^)[а-яёa-z]/g,
+            regExpDelSpace = /^(\s*\-*)*/g,
+            regExpDelSpaceBack = /[\s*\-*]*$/g; 
+
+      if (item.id === 'form2-name') {
+        item.value = item.value.replace(regExpDelSpace, '');
+        item.value = item.value.replace(regExpDelSpaceBack, '');
+        item.value = item.value.replace(regExpTextUp, x => x.toUpperCase());
+      }  else if (item.id === 'form2-message') {
+          item.value = item.value.replace(regExpDelSpace, '');
+          item.value = item.value.replace(regExpDelSpaceBack, '');
+      } else if (item.id === 'form2-email') {
+        
+      } else if (item.id === 'form2-phone') {
+      }
+    };
+
     item.addEventListener('input', checkFilds);
+    item.addEventListener('blur', rebildFilds);
 
   });
 
+
+  //Калькулятор
+
+  const calc = (price = 100) => {
+    const calcBlock = document.querySelector('.calc-block'),
+          calcType = document.querySelector('.calc-type'),
+          calcSquare = document.querySelector('.calc-square'),
+          calcDay = document.querySelector('.calc-day'),
+          calcCoutn = document.querySelector('.calc-count'),
+          totalValue = document.getElementById('total');
+
+    calcBlock.addEventListener('change', event => {
+      const target = event.target;
+
+      const countSum = () => {
+        let total = 0;
+        const typeValue = calcType.options[calcType.selectedIndex].value,
+        squareValue = calcSquare.value;
+
+        console.log(typeValue);
+
+        totalValue.textContent = total;
+      };
+
+  
+    if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
+      countSum();
+    }
+
+
+
+
+    });
+  };
+
+  calc(100);
 
 });
