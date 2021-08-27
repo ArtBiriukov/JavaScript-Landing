@@ -358,19 +358,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const rebildFilds = () => {
       const regExpTextUp = /( |^)[а-яёa-z]/g,
-            regExpDelSpace = /^(\s*\-*)*/g,
-            regExpDelSpaceBack = /[\s*\-*]*$/g; 
+            regExpDelSpaceForword = /^(\s*\-*)*/g,
+            regExpDelSpaceBack = /[\s*\-*]*$/g;
 
       if (item.id === 'form2-name') {
-        item.value = item.value.replace(regExpDelSpace, '');
+        item.value = item.value.replace(regExpDelSpaceForword, '');
         item.value = item.value.replace(regExpDelSpaceBack, '');
         item.value = item.value.replace(regExpTextUp, x => x.toUpperCase());
-      }  else if (item.id === 'form2-message') {
-          item.value = item.value.replace(regExpDelSpace, '');
+      } else if (item.id === 'form2-message') {
+          item.value = item.value.replace(regExpDelSpaceForword, '');
           item.value = item.value.replace(regExpDelSpaceBack, '');
+          item.value = item.value.replace(/\s+/g, ' ');
+          item.value = item.value.replace(/\-+/g, '-');
       } else if (item.id === 'form2-email') {
-        
+        item.value = item.value.replace(/@+/g, '@');
+        item.value = item.value.replace(/\-+/g, '-');
+        item.value = item.value.replace(/\.+/g, '.');
       } else if (item.id === 'form2-phone') {
+        item.value = item.value.replace(/\++/g, '+');
+        item.value = item.value.replace(/\-+/g, '-');
+        item.value = item.value.replace(/\(+/g, '(');
+        item.value = item.value.replace(/\)+/g, ')');
       }
     };
 
@@ -381,7 +389,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   //Калькулятор
-
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
           calcType = document.querySelector('.calc-type'),
