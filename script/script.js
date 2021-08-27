@@ -396,24 +396,35 @@ window.addEventListener('DOMContentLoaded', () => {
     calcBlock.addEventListener('change', event => {
       const target = event.target;
 
-      const countSum = () => {
-        let total = 0;
+      const countSum = (price = 100) => {
+        let total = 0,
+        countValue = 1,
+        dayValue = 1;
         const typeValue = calcType.options[calcType.selectedIndex].value,
-        squareValue = calcSquare.value;
+              squareValue = calcSquare.value;
 
-        console.log(typeValue);
+        if (calcCoutn.value > 1) {
+          countValue += (calcCoutn.value - 1) / 10;
+        }
+
+        //за какое колличество дней
+        if (calcDay.value && calcDay.value < 5) {
+          dayValue *= 2;
+        } else if (calcDay.value && calcDay.value < 10) {
+          dayValue *= 1.5;
+        }
+
+        //самая главная формула
+        if (typeValue && squareValue) {
+          total = parseInt(price * typeValue * squareValue * countValue * dayValue);
+        }
 
         totalValue.textContent = total;
       };
 
-  
-    if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
-      countSum();
-    }
-
-
-
-
+      if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
+        countSum();
+      }
     });
   };
 
