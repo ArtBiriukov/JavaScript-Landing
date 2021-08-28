@@ -393,6 +393,8 @@ window.addEventListener('DOMContentLoaded', () => {
           calcCoutn = document.querySelector('.calc-count'),
           totalValue = document.getElementById('total');
 
+          
+
     calcBlock.addEventListener('change', event => {
       const target = event.target;
 
@@ -401,13 +403,21 @@ window.addEventListener('DOMContentLoaded', () => {
         countValue = 1,
         dayValue = 1;
         const typeValue = calcType.options[calcType.selectedIndex].value,
-              squareValue = calcSquare.value;
+        squareValue = calcSquare.value;
 
+        if (!typeValue) {
+          calcCoutn.value = '';
+          calcSquare.value = '';
+          calcDay.value = '';
+          total = 0;
+        }
+
+        //Количество комнат
         if (calcCoutn.value > 1) {
           countValue += (calcCoutn.value - 1) / 10;
         }
 
-        //за какое колличество дней
+        //за какое количество дней
         if (calcDay.value && calcDay.value < 5) {
           dayValue *= 2;
         } else if (calcDay.value && calcDay.value < 10) {
