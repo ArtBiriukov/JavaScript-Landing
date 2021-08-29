@@ -357,30 +357,6 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     const rebildFilds = () => {
-<<<<<<< HEAD
-      const regExpTextUp = /( |^)[а-яёa-z]/g,
-            regExpDelSpaceForword = /^(\s*\-*)*/g,
-            regExpDelSpaceBack = /[\s*\-*]*$/g;
-
-      if (item.id === 'form2-name') {
-        item.value = item.value.replace(regExpDelSpaceForword, '');
-        item.value = item.value.replace(regExpDelSpaceBack, '');
-        item.value = item.value.replace(regExpTextUp, x => x.toUpperCase());
-      } else if (item.id === 'form2-message') {
-          item.value = item.value.replace(regExpDelSpaceForword, '');
-          item.value = item.value.replace(regExpDelSpaceBack, '');
-          item.value = item.value.replace(/\s+/g, ' ');
-          item.value = item.value.replace(/\-+/g, '-');
-      } else if (item.id === 'form2-email') {
-        item.value = item.value.replace(/@+/g, '@');
-        item.value = item.value.replace(/\-+/g, '-');
-        item.value = item.value.replace(/\.+/g, '.');
-      } else if (item.id === 'form2-phone') {
-        item.value = item.value.replace(/\++/g, '+');
-        item.value = item.value.replace(/\-+/g, '-');
-        item.value = item.value.replace(/\(+/g, '(');
-        item.value = item.value.replace(/\)+/g, ')');
-=======
       const regExpText = /[^А-Яа-яёЁ -]/g,
             regExpEmail = /[^\w@\-\.`\*'!]/g,
             regExpPhone = /[^\d\(\)\-+]/g;
@@ -398,7 +374,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
       } else if (item.id === 'form2-phone') {
        
->>>>>>> les24
       }
     };
 
@@ -409,10 +384,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   //Калькулятор
-<<<<<<< HEAD
-=======
 
->>>>>>> les24
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
           calcType = document.querySelector('.calc-type'),
@@ -421,17 +393,6 @@ window.addEventListener('DOMContentLoaded', () => {
           calcCoutn = document.querySelector('.calc-count'),
           totalValue = document.getElementById('total');
 
-<<<<<<< HEAD
-    calcBlock.addEventListener('change', event => {
-      const target = event.target;
-
-      const countSum = () => {
-        let total = 0;
-        const typeValue = calcType.options[calcType.selectedIndex].value,
-        squareValue = calcSquare.value;
-
-        console.log(typeValue);
-=======
           
 
     calcBlock.addEventListener('change', event => {
@@ -467,25 +428,13 @@ window.addEventListener('DOMContentLoaded', () => {
         if (typeValue && squareValue) {
           total = parseInt(price * typeValue * squareValue * countValue * dayValue);
         }
->>>>>>> les24
 
         totalValue.textContent = total;
       };
 
-<<<<<<< HEAD
-  
-    if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
-      countSum();
-    }
-
-
-
-
-=======
       if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
         countSum();
       }
->>>>>>> les24
     });
   };
 
