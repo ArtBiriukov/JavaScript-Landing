@@ -357,6 +357,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     const rebildFilds = () => {
+<<<<<<< HEAD
       const regExpTextUp = /( |^)[а-яёa-z]/g,
             regExpDelSpaceForword = /^(\s*\-*)*/g,
             regExpDelSpaceBack = /[\s*\-*]*$/g;
@@ -379,6 +380,25 @@ window.addEventListener('DOMContentLoaded', () => {
         item.value = item.value.replace(/\-+/g, '-');
         item.value = item.value.replace(/\(+/g, '(');
         item.value = item.value.replace(/\)+/g, ')');
+=======
+      const regExpText = /[^А-Яа-яёЁ -]/g,
+            regExpEmail = /[^\w@\-\.`\*'!]/g,
+            regExpPhone = /[^\d\(\)\-+]/g;
+
+      if (item.id === 'form2-name') {
+
+        item.value = item.value.replace(/( |^)[а-яёa-z]/g, x => x.toUpperCase());
+      }  else if (item.id === 'form2-message') {
+
+          item.value = item.value.replace(/\s{2,}/g, '');
+          console.log(item.value);
+
+      } else if (item.id === 'form2-email') {
+
+
+      } else if (item.id === 'form2-phone') {
+       
+>>>>>>> les24
       }
     };
 
@@ -389,6 +409,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   //Калькулятор
+<<<<<<< HEAD
+=======
+
+>>>>>>> les24
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
           calcType = document.querySelector('.calc-type'),
@@ -397,6 +421,7 @@ window.addEventListener('DOMContentLoaded', () => {
           calcCoutn = document.querySelector('.calc-count'),
           totalValue = document.getElementById('total');
 
+<<<<<<< HEAD
     calcBlock.addEventListener('change', event => {
       const target = event.target;
 
@@ -406,10 +431,48 @@ window.addEventListener('DOMContentLoaded', () => {
         squareValue = calcSquare.value;
 
         console.log(typeValue);
+=======
+          
+
+    calcBlock.addEventListener('change', event => {
+      const target = event.target;
+
+      const countSum = (price = 100) => {
+        let total = 0,
+        countValue = 1,
+        dayValue = 1;
+        const typeValue = calcType.options[calcType.selectedIndex].value,
+        squareValue = calcSquare.value;
+
+        if (!typeValue) {
+          calcCoutn.value = '';
+          calcSquare.value = '';
+          calcDay.value = '';
+          total = 0;
+        }
+
+        //Количество комнат
+        if (calcCoutn.value > 1) {
+          countValue += (calcCoutn.value - 1) / 10;
+        }
+
+        //за какое количество дней
+        if (calcDay.value && calcDay.value < 5) {
+          dayValue *= 2;
+        } else if (calcDay.value && calcDay.value < 10) {
+          dayValue *= 1.5;
+        }
+
+        //самая главная формула
+        if (typeValue && squareValue) {
+          total = parseInt(price * typeValue * squareValue * countValue * dayValue);
+        }
+>>>>>>> les24
 
         totalValue.textContent = total;
       };
 
+<<<<<<< HEAD
   
     if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
       countSum();
@@ -418,6 +481,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
+=======
+      if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
+        countSum();
+      }
+>>>>>>> les24
     });
   };
 
