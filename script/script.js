@@ -127,7 +127,7 @@ window.addEventListener('DOMContentLoaded', () => {
       item.addEventListener('click', animationPopup);
     });
 
-    popup.addEventListener('click', (event) => {
+    popup.addEventListener('click', event => {
       let target = event.target;
 
       if (target.classList.contains('popup-close')) {
@@ -253,7 +253,7 @@ window.addEventListener('DOMContentLoaded', () => {
       clearInterval(interval);
     };
 
-    sliderContent.addEventListener('click', (event) => {
+    sliderContent.addEventListener('click', event => {
       event.preventDefault();
       const target = event.target;
 
@@ -289,13 +289,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    sliderContent.addEventListener('mouseover', (event) => {
+    sliderContent.addEventListener('mouseover', event => {
       if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
         stopSlide();
       }
     });
 
-    sliderContent.addEventListener('mouseout', (event) => {
+    sliderContent.addEventListener('mouseout', event => {
       if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
         startSlide();
       }
@@ -344,8 +344,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const checkFilds = () => {
       const regExpText = /[^А-Яа-яёЁ -]/g,
-            regExpEmail = /[^\w@\-\.`\*'!]/g,
-            regExpPhone = /[^\d\(\)\-+]/g;
+            regExpEmail = /[^\w@\-\\.`\\*'!]/g,
+            regExpPhone = /[^\d\\(\\)\-+]/g;
 
       if (item.id === 'form2-name' || item.id === 'form2-message') {
         item.value = item.value.replace(regExpText, '');
@@ -357,9 +357,8 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     const rebildFilds = () => {
-<<<<<<< HEAD
       const regExpTextUp = /( |^)[а-яёa-z]/g,
-            regExpDelSpaceForword = /^(\s*\-*)*/g,
+            regExpDelSpaceForword = /^(\s*\\-*)*/g,
             regExpDelSpaceBack = /[\s*\-*]*$/g;
 
       if (item.id === 'form2-name') {
@@ -370,35 +369,16 @@ window.addEventListener('DOMContentLoaded', () => {
           item.value = item.value.replace(regExpDelSpaceForword, '');
           item.value = item.value.replace(regExpDelSpaceBack, '');
           item.value = item.value.replace(/\s+/g, ' ');
-          item.value = item.value.replace(/\-+/g, '-');
+          item.value = item.value.replace(/\\-+/g, '-');
       } else if (item.id === 'form2-email') {
         item.value = item.value.replace(/@+/g, '@');
-        item.value = item.value.replace(/\-+/g, '-');
+        item.value = item.value.replace(/\\-+/g, '-');
         item.value = item.value.replace(/\.+/g, '.');
       } else if (item.id === 'form2-phone') {
         item.value = item.value.replace(/\++/g, '+');
-        item.value = item.value.replace(/\-+/g, '-');
+        item.value = item.value.replace(/\\-+/g, '-');
         item.value = item.value.replace(/\(+/g, '(');
         item.value = item.value.replace(/\)+/g, ')');
-=======
-      const regExpText = /[^А-Яа-яёЁ -]/g,
-            regExpEmail = /[^\w@\-\.`\*'!]/g,
-            regExpPhone = /[^\d\(\)\-+]/g;
-
-      if (item.id === 'form2-name') {
-
-        item.value = item.value.replace(/( |^)[а-яёa-z]/g, x => x.toUpperCase());
-      }  else if (item.id === 'form2-message') {
-
-          item.value = item.value.replace(/\s{2,}/g, '');
-          console.log(item.value);
-
-      } else if (item.id === 'form2-email') {
-
-
-      } else if (item.id === 'form2-phone') {
-       
->>>>>>> les24
       }
     };
 
@@ -409,10 +389,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   //Калькулятор
-<<<<<<< HEAD
-=======
-
->>>>>>> les24
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
           calcType = document.querySelector('.calc-type'),
@@ -421,23 +397,10 @@ window.addEventListener('DOMContentLoaded', () => {
           calcCoutn = document.querySelector('.calc-count'),
           totalValue = document.getElementById('total');
 
-<<<<<<< HEAD
     calcBlock.addEventListener('change', event => {
       const target = event.target;
 
       const countSum = () => {
-        let total = 0;
-        const typeValue = calcType.options[calcType.selectedIndex].value,
-        squareValue = calcSquare.value;
-
-        console.log(typeValue);
-=======
-          
-
-    calcBlock.addEventListener('change', event => {
-      const target = event.target;
-
-      const countSum = (price = 100) => {
         let total = 0,
         countValue = 1,
         dayValue = 1;
@@ -467,25 +430,13 @@ window.addEventListener('DOMContentLoaded', () => {
         if (typeValue && squareValue) {
           total = parseInt(price * typeValue * squareValue * countValue * dayValue);
         }
->>>>>>> les24
 
         totalValue.textContent = total;
       };
 
-<<<<<<< HEAD
-  
-    if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
-      countSum();
-    }
-
-
-
-
-=======
       if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
         countSum();
       }
->>>>>>> les24
     });
   };
 
