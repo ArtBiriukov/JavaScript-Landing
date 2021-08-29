@@ -387,7 +387,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   });
 
-
   //Калькулятор
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
