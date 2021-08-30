@@ -344,8 +344,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const checkFilds = () => {
       const regExpText = /[^А-Яа-яёЁ -]/g,
-            regExpEmail = /[^\w@\-\\.`\\*'!]/g,
-            regExpPhone = /[^\d\\(\\)\-+]/g;
+            regExpEmail = /[^\w@\-\.`\*'!]/g,
+            regExpPhone = /[^\d\(\)\-+]/g;
 
       if (item.id === 'form2-name' || item.id === 'form2-message') {
         item.value = item.value.replace(regExpText, '');
@@ -357,27 +357,8 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     const rebildFilds = () => {
-<<<<<<< HEAD
-      const regExpText = /[^А-Яа-яёЁ -]/g,
-            regExpEmail = /[^\w@\-\.`\*'!]/g,
-            regExpPhone = /[^\d\(\)\-+]/g;
-
-      if (item.id === 'form2-name') {
-
-        item.value = item.value.replace(/( |^)[а-яёa-z]/g, x => x.toUpperCase());
-      }  else if (item.id === 'form2-message') {
-
-          item.value = item.value.replace(/\s{2,}/g, '');
-          console.log(item.value);
-
-      } else if (item.id === 'form2-email') {
-
-
-      } else if (item.id === 'form2-phone') {
-       
-=======
       const regExpTextUp = /( |^)[а-яёa-z]/g,
-            regExpDelSpaceForword = /^(\s*\\-*)*/g,
+            regExpDelSpaceForword = /^(\s*\-*)*/g,
             regExpDelSpaceBack = /[\s*\-*]*$/g;
 
       if (item.id === 'form2-name') {
@@ -388,17 +369,16 @@ window.addEventListener('DOMContentLoaded', () => {
           item.value = item.value.replace(regExpDelSpaceForword, '');
           item.value = item.value.replace(regExpDelSpaceBack, '');
           item.value = item.value.replace(/\s+/g, ' ');
-          item.value = item.value.replace(/\\-+/g, '-');
+          item.value = item.value.replace(/\-+/g, '-');
       } else if (item.id === 'form2-email') {
         item.value = item.value.replace(/@+/g, '@');
-        item.value = item.value.replace(/\\-+/g, '-');
+        item.value = item.value.replace(/\-+/g, '-');
         item.value = item.value.replace(/\.+/g, '.');
       } else if (item.id === 'form2-phone') {
         item.value = item.value.replace(/\++/g, '+');
-        item.value = item.value.replace(/\\-+/g, '-');
+        item.value = item.value.replace(/\-+/g, '-');
         item.value = item.value.replace(/\(+/g, '(');
         item.value = item.value.replace(/\)+/g, ')');
->>>>>>> les25
       }
     };
 
@@ -408,10 +388,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   //Калькулятор
-<<<<<<< HEAD
-
-=======
->>>>>>> les25
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
           calcType = document.querySelector('.calc-type'),
@@ -420,19 +396,10 @@ window.addEventListener('DOMContentLoaded', () => {
           calcCoutn = document.querySelector('.calc-count'),
           totalValue = document.getElementById('total');
 
-<<<<<<< HEAD
-          
-
-    calcBlock.addEventListener('change', event => {
-      const target = event.target;
-
-      const countSum = (price = 100) => {
-=======
     calcBlock.addEventListener('change', event => {
       const target = event.target;
 
       const countSum = () => {
->>>>>>> les25
         let total = 0,
         countValue = 1,
         dayValue = 1;
@@ -463,7 +430,42 @@ window.addEventListener('DOMContentLoaded', () => {
           total = parseInt(price * typeValue * squareValue * countValue * dayValue);
         }
 
-        totalValue.textContent = total;
+        // totalValue.textContent = total;
+
+
+        const animateValue = (start, end, duration) => {
+
+          let startTimestamp = null;
+          const step = timestamp => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            totalValue.textContent = Math.floor(progress * (end + start) + start);
+            if (progress < 1) {
+              window.requestAnimationFrame(step);
+            }
+          };
+          window.requestAnimationFrame(step);
+        };
+
+        animateValue(0, total, 1000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       };
 
       if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
