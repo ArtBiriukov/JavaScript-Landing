@@ -127,7 +127,7 @@ window.addEventListener('DOMContentLoaded', () => {
       item.addEventListener('click', animationPopup);
     });
 
-    popup.addEventListener('click', (event) => {
+    popup.addEventListener('click', event => {
       let target = event.target;
 
       if (target.classList.contains('popup-close')) {
@@ -253,7 +253,7 @@ window.addEventListener('DOMContentLoaded', () => {
       clearInterval(interval);
     };
 
-    sliderContent.addEventListener('click', (event) => {
+    sliderContent.addEventListener('click', event => {
       event.preventDefault();
       const target = event.target;
 
@@ -289,13 +289,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    sliderContent.addEventListener('mouseover', (event) => {
+    sliderContent.addEventListener('mouseover', event => {
       if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
         stopSlide();
       }
     });
 
-    sliderContent.addEventListener('mouseout', (event) => {
+    sliderContent.addEventListener('mouseout', event => {
       if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
         startSlide();
       }
@@ -344,8 +344,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const checkFilds = () => {
       const regExpText = /[^А-Яа-яёЁ -]/g,
-            regExpEmail = /[^\w@\-\.`\*'!]/g,
-            regExpPhone = /[^\d\(\)\-+]/g;
+            regExpEmail = /[^\w@\-\\.`\\*'!]/g,
+            regExpPhone = /[^\d\\(\\)\-+]/g;
 
       if (item.id === 'form2-name' || item.id === 'form2-message') {
         item.value = item.value.replace(regExpText, '');
@@ -357,6 +357,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     const rebildFilds = () => {
+<<<<<<< HEAD
       const regExpText = /[^А-Яа-яёЁ -]/g,
             regExpEmail = /[^\w@\-\.`\*'!]/g,
             regExpPhone = /[^\d\(\)\-+]/g;
@@ -374,6 +375,30 @@ window.addEventListener('DOMContentLoaded', () => {
 
       } else if (item.id === 'form2-phone') {
        
+=======
+      const regExpTextUp = /( |^)[а-яёa-z]/g,
+            regExpDelSpaceForword = /^(\s*\\-*)*/g,
+            regExpDelSpaceBack = /[\s*\-*]*$/g;
+
+      if (item.id === 'form2-name') {
+        item.value = item.value.replace(regExpDelSpaceForword, '');
+        item.value = item.value.replace(regExpDelSpaceBack, '');
+        item.value = item.value.replace(regExpTextUp, x => x.toUpperCase());
+      } else if (item.id === 'form2-message') {
+          item.value = item.value.replace(regExpDelSpaceForword, '');
+          item.value = item.value.replace(regExpDelSpaceBack, '');
+          item.value = item.value.replace(/\s+/g, ' ');
+          item.value = item.value.replace(/\\-+/g, '-');
+      } else if (item.id === 'form2-email') {
+        item.value = item.value.replace(/@+/g, '@');
+        item.value = item.value.replace(/\\-+/g, '-');
+        item.value = item.value.replace(/\.+/g, '.');
+      } else if (item.id === 'form2-phone') {
+        item.value = item.value.replace(/\++/g, '+');
+        item.value = item.value.replace(/\\-+/g, '-');
+        item.value = item.value.replace(/\(+/g, '(');
+        item.value = item.value.replace(/\)+/g, ')');
+>>>>>>> les25
       }
     };
 
@@ -382,9 +407,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
   });
 
-
   //Калькулятор
+<<<<<<< HEAD
 
+=======
+>>>>>>> les25
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
           calcType = document.querySelector('.calc-type'),
@@ -393,12 +420,19 @@ window.addEventListener('DOMContentLoaded', () => {
           calcCoutn = document.querySelector('.calc-count'),
           totalValue = document.getElementById('total');
 
+<<<<<<< HEAD
           
 
     calcBlock.addEventListener('change', event => {
       const target = event.target;
 
       const countSum = (price = 100) => {
+=======
+    calcBlock.addEventListener('change', event => {
+      const target = event.target;
+
+      const countSum = () => {
+>>>>>>> les25
         let total = 0,
         countValue = 1,
         dayValue = 1;
