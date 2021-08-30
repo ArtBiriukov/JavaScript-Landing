@@ -344,8 +344,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const checkFilds = () => {
       const regExpText = /[^А-Яа-яёЁ -]/g,
-            regExpEmail = /[^\w@\-\\.`\\*'!]/g,
-            regExpPhone = /[^\d\\(\\)\-+]/g;
+            regExpEmail = /[^\w@\-\.`\*'!]/g,
+            regExpPhone = /[^\d\(\)\-+]/g;
 
       if (item.id === 'form2-name' || item.id === 'form2-message') {
         item.value = item.value.replace(regExpText, '');
@@ -358,7 +358,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const rebildFilds = () => {
       const regExpTextUp = /( |^)[а-яёa-z]/g,
-            regExpDelSpaceForword = /^(\s*\\-*)*/g,
+            regExpDelSpaceForword = /^(\s*\-*)*/g,
             regExpDelSpaceBack = /[\s*\-*]*$/g;
 
       if (item.id === 'form2-name') {
@@ -369,14 +369,14 @@ window.addEventListener('DOMContentLoaded', () => {
           item.value = item.value.replace(regExpDelSpaceForword, '');
           item.value = item.value.replace(regExpDelSpaceBack, '');
           item.value = item.value.replace(/\s+/g, ' ');
-          item.value = item.value.replace(/\\-+/g, '-');
+          item.value = item.value.replace(/\-+/g, '-');
       } else if (item.id === 'form2-email') {
         item.value = item.value.replace(/@+/g, '@');
-        item.value = item.value.replace(/\\-+/g, '-');
+        item.value = item.value.replace(/\-+/g, '-');
         item.value = item.value.replace(/\.+/g, '.');
       } else if (item.id === 'form2-phone') {
         item.value = item.value.replace(/\++/g, '+');
-        item.value = item.value.replace(/\\-+/g, '-');
+        item.value = item.value.replace(/\-+/g, '-');
         item.value = item.value.replace(/\(+/g, '(');
         item.value = item.value.replace(/\)+/g, ')');
       }
@@ -430,7 +430,21 @@ window.addEventListener('DOMContentLoaded', () => {
           total = parseInt(price * typeValue * squareValue * countValue * dayValue);
         }
 
-        totalValue.textContent = total;
+        const animateValue = (start, end, duration) => {
+
+          let startTimestamp = null;
+          const step = timestamp => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            totalValue.textContent = Math.floor(progress * (end + start) + start);
+            if (progress < 1) {
+              window.requestAnimationFrame(step);
+            }
+          };
+          window.requestAnimationFrame(step);
+        };
+
+        animateValue(0, total, 1000);
       };
 
       if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {

@@ -11,10 +11,16 @@ class Validator {
     this.applyStyle();
     this.setPattern();
     this.elementsForm.forEach(elem => elem.addEventListener('change', this.chekIt.bind(this)));
+    // this.elementsForm.forEach(elem => this.chekIt({ target: elem }));
+    this.form.addEventListener('submit', e => {
+      if (this.error.size) {
+        e.preventDefault();
+      }
+    });
   }
 
   isValid(elem) {
-    //патарны
+    //паттарны
     const validatorMethod = {
       notEmpty(elem) {
         if (elem.value.trim === '') {
@@ -22,23 +28,32 @@ class Validator {
         }
         return true;
       },
+
       pattern(elem, pattern) {
         return pattern.test(elem.value);
       }
     };
+
+    console.log(this);
+    if (this.method) {
     //Откуда ID???
-    const method = this.method;
+      const method = this.method[elem.id];
 
-    console.log(method);
-    // if (method) {
-    //   return method.every(item => console.log(item));
-    // }
+      if (method) {
+        return method.every(item => {
+          validatorMethod[item[0](elem, this.pattern[item[1]])];
+        });
+      }
 
+    } else {
+      console.log('необходимо передать ID  полей ввода и методы проверки этих полей');
+    }
     return true;
   }
 
   //Проверка на валидность
   chekIt(event) {
+
     const target = event.target;
     if (this.isValid(target)) {
       this.showSucsess(target);
@@ -53,7 +68,7 @@ class Validator {
     elem.classList.remove('success');
     elem.classList.add('error');
 
-    if (elem.nextElementSibling.classList.contains('validator-error')) {
+    if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
       return;
     }
     const errorDiv = document.createElement('div');
@@ -67,9 +82,7 @@ class Validator {
     elem.classList.add('success');
 
     //ТУТ ОШИБКА!!!
-    if (elem.nextElementSibling === null)  {
-      return;
-    } else if (elem.nextElementSibling.classList.contains('validator-error')) {
+    if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
       elem.nextElementSibling.remove();
     }
   }
@@ -77,11 +90,11 @@ class Validator {
   applyStyle() {
     const style = document.createElement('style');
     style.textContent = `
-    input.success {
-      border: 1px solid green
+    body input.success {
+      border: 6px solid green
     }
-    input.error {
-      border: 1px solid red
+    body input.error {
+      border: 6px solid red
     }
     .validator-error {
       font-size: 12px;
