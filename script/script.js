@@ -430,9 +430,6 @@ window.addEventListener('DOMContentLoaded', () => {
           total = parseInt(price * typeValue * squareValue * countValue * dayValue);
         }
 
-        // totalValue.textContent = total;
-
-
         const animateValue = (start, end, duration) => {
 
           let startTimestamp = null;
@@ -448,24 +445,6 @@ window.addEventListener('DOMContentLoaded', () => {
         };
 
         animateValue(0, total, 1000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       };
 
       if (target === calcType || target === calcSquare || target === calcDay || target === calcCoutn) {
