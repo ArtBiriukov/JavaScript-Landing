@@ -458,8 +458,8 @@ window.addEventListener('DOMContentLoaded', () => {
   //ajax работа с сервером
   const sendForm = () => {
     const errorMessage = 'Что то не то',
-    loadMessage = 'Загрузка ...',
-    successMessage = 'Ваши данные у нас ))';
+          loadMessage = 'Загрузка ...',
+          successMessage = 'Ваши данные у нас ))';
 
     const formOne = document.getElementById('form1'),
           formTwo = document.getElementById('form2'),
@@ -468,16 +468,30 @@ window.addEventListener('DOMContentLoaded', () => {
     const statusMessage = document.createElement('div');
     statusMessage.style.cssText = `
     font-size: 2rem;
+    background-color: steelblue;
+    width: 230px;
+    padding: 10px;
+    border: 2px solid burlywood;
+    border-radius: 25px;
+    margin: 10px auto;
     `;
 
     //обработка запроса
-    formOne.addEventListener('submit', (event) => {
+    const statusMessageRequest = (event) => {
       event.preventDefault();
-      formOne.appendChild(statusMessage);
+
+      const target = event.originalTarget,
+            inputTarget = target.querySelectorAll('input');
+
+      inputTarget.forEach(item => {
+        item.value = '';
+      });
+
+      target.appendChild(statusMessage);
 
       statusMessage.textContent = loadMessage;
 
-      const formData = new FormData(formOne);
+      const formData = new FormData(target);
       let body = {};
 
       formData.forEach((item, key) => {
@@ -486,63 +500,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
       postData(body,
         () => {
-        statusMessage.textContent = successMessage;
+          statusMessage.textContent = successMessage;
         },
         (error) => {
           successMessage.textContent = errorMessage;
           console.error(error);
       });
 
-    });
-    //форма 2
-    formTwo.addEventListener('submit', (event) => {
-      event.preventDefault();
-      formTwo.appendChild(statusMessage);
+    };
 
-      statusMessage.textContent = loadMessage;
-
-      const formData = new FormData(formOne);
-      let body = {};
-
-      formData.forEach((item, key) => {
-        body[key] = item;
-      });
-
-      postData(body,
-        () => {
-        statusMessage.textContent = successMessage;
-        },
-        (error) => {
-          successMessage.textContent = errorMessage;
-          console.error(error);
-      });
-
-    });
-
-    //форма 3 модалка
-    modalForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      modalForm.appendChild(statusMessage);
-
-      statusMessage.textContent = loadMessage;
-
-      const formData = new FormData(formOne);
-      let body = {};
-
-      formData.forEach((item, key) => {
-        body[key] = item;
-      });
-
-      postData(body,
-        () => {
-        statusMessage.textContent = successMessage;
-        },
-        (error) => {
-          successMessage.textContent = errorMessage;
-          console.error(error);
-      });
-
-    });
+    formOne.addEventListener('submit', statusMessageRequest);
+    formTwo.addEventListener('submit', statusMessageRequest);
+    modalForm.addEventListener('submit', statusMessageRequest);
 
     //запрос на сервер
     const postData = (body, outputData, errorData) => {
