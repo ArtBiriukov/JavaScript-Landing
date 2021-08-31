@@ -11,8 +11,10 @@ class Validator {
     this.applyStyle();
     this.setPattern();
     this.elementsForm.forEach(elem => elem.addEventListener('change', this.chekIt.bind(this)));
-    // this.elementsForm.forEach(elem => this.chekIt({ target: elem }));
     this.form.addEventListener('submit', e => {
+      e.preventDefault();
+      this.elementsForm.forEach(elem => this.chekIt({ target: elem }));
+
       if (this.error.size) {
         e.preventDefault();
       }
@@ -23,41 +25,35 @@ class Validator {
     //паттарны
     const validatorMethod = {
       notEmpty(elem) {
-        if (elem.value.trim === '') {
+        if (elem.value.trim() === '') {
           return false;
         }
         return true;
       },
-
       pattern(elem, pattern) {
         return pattern.test(elem.value);
       }
     };
 
-    console.log(this);
     if (this.method) {
-    //Откуда ID???
-      const method = this.method[elem.id];
+      const method = this.method[elem.name];
 
       if (method) {
-        return method.every(item => {
-          validatorMethod[item[0](elem, this.pattern[item[1]])];
-        });
+        return method.every(item => validatorMethod[item[0]](elem, this.pattern[item[1]]));
       }
-
     } else {
       console.log('необходимо передать ID  полей ввода и методы проверки этих полей');
     }
+
     return true;
   }
 
   //Проверка на валидность
   chekIt(event) {
-
     const target = event.target;
     if (this.isValid(target)) {
       this.showSucsess(target);
-      this.error.remove(target);
+      this.error.delete(target);
     } else {
       this.showError(target);
       this.error.add(target);
@@ -71,6 +67,7 @@ class Validator {
     if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
       return;
     }
+
     const errorDiv = document.createElement('div');
     errorDiv.textContent = 'Ошибка тут';
     errorDiv.classList.add('validator-error');
@@ -81,7 +78,6 @@ class Validator {
     elem.classList.remove('error');
     elem.classList.add('success');
 
-    //ТУТ ОШИБКА!!!
     if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
       elem.nextElementSibling.remove();
     }
@@ -91,10 +87,12 @@ class Validator {
     const style = document.createElement('style');
     style.textContent = `
     body input.success {
-      border: 6px solid green
+      border: 2px solid green;
+      background-color: aquamarine
     }
     body input.error {
-      border: 6px solid red
+      border: 2px solid red;
+      background-color: crimson
     }
     .validator-error {
       font-size: 12px;
@@ -106,6 +104,14 @@ class Validator {
 
   setPattern() {
 
+    if (!this.pattern.name) {
+      this.pattern.name = /^[А-Яа-яЁё]+$/;
+    }
+
+    if (!this.pattern.message) {
+      this.pattern.message = /^[А-Яа-яЁё\s]+$/g;
+    }
+
     if (!this.pattern.phone) {
       this.pattern.phone = /^\+?[78]([-()]*\d){10}$/;
     }
@@ -113,46 +119,79 @@ class Validator {
     if (!this.pattern.email) {
       this.pattern.email = /^\w+@\w+\.\w{2,}$/;
     }
-
   }
 }
 
-
-
-const valid = new Validator({
+const validFormOne = new Validator({
   selector: '#form1',
-  pattern: {},
+  pattern: {
+  },
   method: {
-    'phone': [
+    'user_name': [
+      ['notEmpty'],
+      ['pattern', 'name']
+    ],
+    'user_phone': [
       ['notEmpty'],
       ['pattern', 'phone']
     ],
 
-    'email': [
+    'user_email': [
       ['notEmpty'],
       ['pattern', 'email']
     ]
   }
 });
 
-valid.init();
+const validFormTwo = new Validator({
+  selector: '#form2',
+  pattern: {
+  },
+  method: {
+    'user_name': [
+      ['notEmpty'],
+      ['pattern', 'name']
+    ],
+    'user_phone': [
+      ['notEmpty'],
+      ['pattern', 'phone']
+    ],
 
+    'user_email': [
+      ['notEmpty'],
+      ['pattern', 'email']
+    ],
 
+    'user_message': [
+      ['notEmpty'],
+      ['pattern', 'message']
+    ]
+  }
+});
 
+const validFormThree = new Validator({
+  selector: '#form3',
+  pattern: {
+  },
+  method: {
+    'user_name': [
+      ['notEmpty'],
+      ['pattern', 'name']
+    ],
+    'user_phone': [
+      ['notEmpty'],
+      ['pattern', 'phone']
+    ],
 
-/*
+    'user_email': [
+      ['notEmpty'],
+      ['pattern', 'email']
+    ],
 
-#form1
-#form1-name
-#form1-email
-#form1-phone
-.form-btn
+  }
+});
 
-#form2
-#form2-name
-#form2-email
-#form2-phone
-#form2-message
-.form-btn
+validFormOne.init();
+validFormTwo.init();
+validFormThree.init();
 
-*/
