@@ -382,8 +382,8 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    item.addEventListener('input', checkFilds);
-    item.addEventListener('blur', rebildFilds);
+    // item.addEventListener('input', checkFilds);
+    // item.addEventListener('blur', rebildFilds);
 
   });
 
@@ -467,13 +467,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const statusMessage = document.createElement('div');
     statusMessage.style.cssText = `
-    font-size: 2rem;
-    background-color: steelblue;
-    width: 230px;
-    padding: 10px;
-    border: 2px solid burlywood;
-    border-radius: 25px;
-    margin: 10px auto;
+      font-size: 2rem;
+      background-color: steelblue;
+      width: 230px;
+      padding: 10px;
+      border: 2px solid burlywood;
+      border-radius: 25px;
+      margin: 10px auto;
     `;
 
     //обработка запроса
@@ -481,11 +481,7 @@ window.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
 
       const target = event.originalTarget,
-            inputTarget = target.querySelectorAll('input');
-
-      inputTarget.forEach(item => {
-        item.value = '';
-      });
+      targetInput = target.querySelectorAll('input');
 
       target.appendChild(statusMessage);
 
@@ -498,13 +494,34 @@ window.addEventListener('DOMContentLoaded', () => {
         body[key] = item;
       });
 
+      const clearInputs = () => {
+        targetInput.forEach(item => {
+          item.value = '';
+
+          setTimeout(() => {
+            statusMessage.style.display = 'none';
+          }, 2000);
+
+          if (item.classList.contains('success') || item.classList.contains('error')) {
+            item.classList.remove('error');
+            item.classList.remove('success');
+          }
+
+          console.log(popUp);
+        });
+      };
+
       postData(body,
         () => {
+          statusMessage.style.display = 'block';
           statusMessage.textContent = successMessage;
+          clearInputs();
         },
         (error) => {
+          statusMessage.style.display = 'block';
           successMessage.textContent = errorMessage;
           console.error(error);
+          clearInputs();
       });
 
     };
