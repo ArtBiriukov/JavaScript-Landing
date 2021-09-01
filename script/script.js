@@ -461,10 +461,6 @@ window.addEventListener('DOMContentLoaded', () => {
           loadMessage = 'Загрузка ...',
           successMessage = 'Ваши данные у нас ))';
 
-    const formOne = document.getElementById('form1'),
-          formTwo = document.getElementById('form2'),
-          modalForm = document.getElementById('form3');
-
     const statusMessage = document.createElement('div');
     statusMessage.style.cssText = `
       font-size: 2rem;
@@ -476,81 +472,108 @@ window.addEventListener('DOMContentLoaded', () => {
       margin: 10px auto;
     `;
 
-    //обработка запроса
-    const statusMessageRequest = (event) => {
-      event.preventDefault();
-
-      const target = event.originalTarget,
-      targetInput = target.querySelectorAll('input');
-
-      target.appendChild(statusMessage);
-
-      statusMessage.textContent = loadMessage;
-
-      const formData = new FormData(target);
-      let body = {};
-
-      formData.forEach((item, key) => {
-        body[key] = item;
-      });
-
-      const clearInputs = () => {
-        targetInput.forEach(item => {
-          item.value = '';
-
-          setTimeout(() => {
-            statusMessage.style.display = 'none';
-          }, 2000);
-
-          if (item.classList.contains('success') || item.classList.contains('error')) {
-            item.classList.remove('error');
-            item.classList.remove('success');
-          }
-
-          console.log(popUp);
-        });
-      };
-
-      postData(body,
-        () => {
-          statusMessage.style.display = 'block';
-          statusMessage.textContent = successMessage;
-          clearInputs();
-        },
-        (error) => {
-          statusMessage.style.display = 'block';
-          successMessage.textContent = errorMessage;
-          console.error(error);
-          clearInputs();
-      });
-
-    };
-
-    formOne.addEventListener('submit', statusMessageRequest);
-    formTwo.addEventListener('submit', statusMessageRequest);
-    modalForm.addEventListener('submit', statusMessageRequest);
-
     //запрос на сервер
     const postData = (body, outputData, errorData) => {
       const request = new XMLHttpRequest();
+
       request.addEventListener('readystatechange', () => {
-
         if (request.readyState !== 4) {
-          return;
-        }
-
+            return;
+          }
         if (request.status === 200) {
-          outputData();
+            outputData();
         } else {
-          errorData(request.status);
+            errorData(request.status);
         }
-
       });
-
       request.open('POST', './server.php');
       request.setRequestHeader('contant-Type', 'application/json');
       request.send(JSON.stringify(body));
+      };
+
+    //валидация
+    const validInputs = event => {
+      const target = event.target;
+
+      const regExpName = /[^а-яё ]/gi,
+        regExpMessag = /[^\W а-яё\d]/gi,
+        regExpPhone = /[^+\d]/g,
+        regExpEmail = /[^a-z @ \- ! _ . ~ * '']/gi;
+
+      if (target.name === 'user_name') {
+        target.value = target.value.replace(regExpName, '');
+      }
+      if (target.name === 'user_phone') {
+        target.value = target.value.replace(regExpPhone, '');
+      }
+      if (target.name === 'user_email') {
+        target.value = target.value.replace(regExpEmail, '');
+      }
+      if (target.name === 'user_message') {
+        target.value = target.value.replace(regExpMessag, '');
+      }
     };
+    //отчистка input
+    const clearInputs = inputs => {
+      inputs.forEach(item => {
+        item.value = '';
+      });
+    };
+
+    //убирать сообшение
+    const closeMessage = () => {
+      const popUp = document.querySelector('.popup');
+          popUp.style.display = 'none';
+          statusMessage.style.display = 'none';
+    };
+
+    //работа по формам
+    const workForm = idForm => {
+      const form = document.getElementById(idForm);
+      console.log(form);
+
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const target = event.originalTarget,
+        targetInput = target.querySelectorAll('input');
+
+        target.appendChild(statusMessage);
+
+        statusMessage.textContent = loadMessage;
+
+        const formData = new FormData(target);
+
+        let body = {};
+
+        formData.forEach((item, key) => {
+          body[key] = item;
+        });
+
+        postData(body,
+          () => {
+            statusMessage.style.display = 'block';
+            statusMessage.textContent = successMessage;
+            clearInputs(targetInput);
+            setTimeout(closeMessage, 1000);
+
+          },
+          (error) => {
+            statusMessage.style.display = 'block';
+            successMessage.textContent = errorMessage;
+            console.error(error);
+            clearInputs(targetInput);
+            setTimeout(closeMessage, 1000);
+        });
+
+      });
+
+      form.addEventListener('input', validInputs);
+    };
+
+    workForm('form1');
+    workForm('form2');
+    workForm('form3');
   };
 
   sendForm();

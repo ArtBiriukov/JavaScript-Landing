@@ -1,20 +1,18 @@
-const allInput = document.querySelectorAll('input');
-
-const changeColorOnRed = (input) => {
-  input.style.cssText = `
+const changeColorOnRed = (inputType) => {
+  inputType.style.cssText = `
   border: 3px solid red;`;
 };
 
-const changeColorOnGreen = (input) => {
-  input.style.cssText = `
+const changeColorOnGreen = (inputType) => {
+  inputType.style.cssText = `
   border: 3px solid green;`;
 };
 
 const checkValid = (value, input) => {
-  const regExpName = /^[А-Яа-яЁё\s]+$/g,
+  const regExpName = /[^а-яё\s]/gi,
     regExpMessag = /^[?!,.а-яА-ЯёЁ0-9\s]+$/g,
-    regExpPhone = /[^0-9+]/g,
-    regExpEmail = /^\w+@\w+\.\w{2,}$/g;
+    regExpPhone = /[^+\d]/g,
+    regExpEmail = /[^a-z @ \- ! _ . ~ * '']/gi;
 
   if (value.trim() === '') {
     input.style.cssText = `
@@ -34,9 +32,9 @@ const checkValid = (value, input) => {
   }
 
   if (!regExpEmail.test(value)) {
-    changeColorOnRed(input);
-  } else {
     changeColorOnGreen(input);
+  } else {
+    changeColorOnRed(input);
   }
 
   if (!regExpMessag.test(value)) {
@@ -46,24 +44,19 @@ const checkValid = (value, input) => {
   }
 };
 
+const validInputs = event => {
+  const target = event.target;
 
-allInput.forEach(item => {
-  item.addEventListener('blur', e => {
-    const target = e.target,
-      targetName = e.target.name,
-      targetValue = e.target.value;
-
-    if (targetName === 'user_name') {
-      checkValid(targetValue, target);
-    } else if (targetName === 'user_phone') {
-      checkValid(targetValue, target);
-    } else if (targetName === 'user_email') {
-      checkValid(targetValue, target);
-    } else if (targetName === 'user_message') {
-      checkValid(targetValue, target);
-    }
-
-  });
-});
-
-
+  if (target.name === 'user_name') {
+    checkValid(target.value, target);
+  }
+  if (target.name  === 'user_phone') {
+    checkValid(target.value, target);
+  }
+  if (target.name  === 'user_email') {
+    checkValid(target.value, target);
+  }
+  if (target.name  === 'user_message') {
+    checkValid(target.value, target);
+  }
+};
