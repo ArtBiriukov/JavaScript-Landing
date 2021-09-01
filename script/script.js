@@ -455,4 +455,87 @@ window.addEventListener('DOMContentLoaded', () => {
 
   calc(100);
 
+  //ajax работа с сервером
+  const sendForm = () => {
+    const errorMessage = 'Что то не то',
+          loadMessage = 'Загрузка ...',
+          successMessage = 'Ваши данные у нас ))';
+
+    const formOne = document.getElementById('form1'),
+          formTwo = document.getElementById('form2'),
+          modalForm = document.getElementById('form3');
+
+    const statusMessage = document.createElement('div');
+    statusMessage.style.cssText = `
+    font-size: 2rem;
+    background-color: steelblue;
+    width: 230px;
+    padding: 10px;
+    border: 2px solid burlywood;
+    border-radius: 25px;
+    margin: 10px auto;
+    `;
+
+    //обработка запроса
+    const statusMessageRequest = (event) => {
+      event.preventDefault();
+
+      const target = event.originalTarget,
+            inputTarget = target.querySelectorAll('input');
+
+      inputTarget.forEach(item => {
+        item.value = '';
+      });
+
+      target.appendChild(statusMessage);
+
+      statusMessage.textContent = loadMessage;
+
+      const formData = new FormData(target);
+      let body = {};
+
+      formData.forEach((item, key) => {
+        body[key] = item;
+      });
+
+      postData(body,
+        () => {
+          statusMessage.textContent = successMessage;
+        },
+        (error) => {
+          successMessage.textContent = errorMessage;
+          console.error(error);
+      });
+
+    };
+
+    formOne.addEventListener('submit', statusMessageRequest);
+    formTwo.addEventListener('submit', statusMessageRequest);
+    modalForm.addEventListener('submit', statusMessageRequest);
+
+    //запрос на сервер
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+      request.addEventListener('readystatechange', () => {
+
+        if (request.readyState !== 4) {
+          return;
+        }
+
+        if (request.status === 200) {
+          outputData();
+        } else {
+          errorData(request.status);
+        }
+
+      });
+
+      request.open('POST', './server.php');
+      request.setRequestHeader('contant-Type', 'application/json');
+      request.send(JSON.stringify(body));
+    };
+  };
+
+  sendForm();
+
 });
