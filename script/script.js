@@ -462,6 +462,7 @@ window.addEventListener('DOMContentLoaded', () => {
           successMessage = 'Ваши данные у нас ))';
 
     const statusMessage = document.createElement('div');
+    statusMessage.classList.add('animate__animated');
     statusMessage.style.cssText = `
       font-size: 2rem;
       background-color: steelblue;
@@ -523,23 +524,22 @@ window.addEventListener('DOMContentLoaded', () => {
     //убирать сообшение
     const closeMessage = () => {
       const popUp = document.querySelector('.popup');
-          popUp.style.display = 'none';
-          statusMessage.style.display = 'none';
+      popUp.style.display = 'none';
+      statusMessage.remove();
     };
 
     //работа по формам
     const workForm = idForm => {
       const form = document.getElementById(idForm);
-      console.log(form);
 
       form.addEventListener('submit', event => {
         event.preventDefault();
 
-        const target = event.originalTarget,
+        const target = event.target,
         targetInput = target.querySelectorAll('input');
 
         target.appendChild(statusMessage);
-
+        statusMessage.classList.add('animate__backInRight');
         statusMessage.textContent = loadMessage;
 
         const formData = new FormData(target);
@@ -555,15 +555,14 @@ window.addEventListener('DOMContentLoaded', () => {
             statusMessage.style.display = 'block';
             statusMessage.textContent = successMessage;
             clearInputs(targetInput);
-            setTimeout(closeMessage, 1000);
-
+            setTimeout(closeMessage, 2000);
           },
           (error) => {
             statusMessage.style.display = 'block';
             successMessage.textContent = errorMessage;
             console.error(error);
             clearInputs(targetInput);
-            setTimeout(closeMessage, 1000);
+            setTimeout(closeMessage, 2000);
         });
 
       });
