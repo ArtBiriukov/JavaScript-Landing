@@ -1,9 +1,9 @@
-const changeColorOnRed = (inputType) => {
+const changeColorOnRed = inputType => {
   inputType.style.cssText = `
   border: 3px solid red;`;
 };
 
-const changeColorOnGreen = (inputType) => {
+const changeColorOnGreen = inputType => {
   inputType.style.cssText = `
   border: 3px solid green;`;
 };

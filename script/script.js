@@ -473,23 +473,27 @@ window.addEventListener('DOMContentLoaded', () => {
     `;
 
     //запрос на сервер
-    const postData = (body, outputData, errorData) => {
-      const request = new XMLHttpRequest();
+    const postData = body => new Promise((resolve, reject) => {
 
-      request.addEventListener('readystatechange', () => {
-        if (request.readyState !== 4) {
-            return;
+        const request = new XMLHttpRequest();
+        request.open('POST', './server.php');
+        request.setRequestHeader('contant-Type', 'application/json');
+
+        request.addEventListener('readystatechange', () => {
+          if (request.readyState !== 4) {
+              return;
+            }
+
+          if (request.status === 200) {
+            resolve();
+          } else {
+            reject(request.status);
           }
-        if (request.status === 200) {
-            outputData();
-        } else {
-            errorData(request.status);
-        }
+        });
+
+        request.send(JSON.stringify(body));
+
       });
-      request.open('POST', './server.php');
-      request.setRequestHeader('contant-Type', 'application/json');
-      request.send(JSON.stringify(body));
-      };
 
     //валидация
     const validInputs = event => {
@@ -530,12 +534,11 @@ window.addEventListener('DOMContentLoaded', () => {
     //работа по формам
     const workForm = idForm => {
       const form = document.getElementById(idForm);
-      console.log(form);
 
       form.addEventListener('submit', event => {
         event.preventDefault();
 
-        const target = event.originalTarget,
+        const target = event.target,
         targetInput = target.querySelectorAll('input');
 
         target.appendChild(statusMessage);
@@ -550,22 +553,27 @@ window.addEventListener('DOMContentLoaded', () => {
           body[key] = item;
         });
 
-        postData(body,
-          () => {
-            statusMessage.style.display = 'block';
-            statusMessage.textContent = successMessage;
-            clearInputs(targetInput);
-            setTimeout(closeMessage, 1000);
+        //Если все гуд
+        const successResolve = () => {
+          statusMessage.style.display = 'block';
+          statusMessage.textContent = successMessage;
+          clearInputs(targetInput);
+          setTimeout(closeMessage, 1000);
+        };
 
-          },
-          (error) => {
-            statusMessage.style.display = 'block';
-            successMessage.textContent = errorMessage;
-            console.error(error);
-            clearInputs(targetInput);
-            setTimeout(closeMessage, 1000);
-        });
+        //Если ошибка
+        const errorResolve = () => {
+          statusMessage.style.display = 'block';
+          successMessage.textContent = errorMessage;
+          clearInputs(targetInput);
+          setTimeout(closeMessage, 1000);
+        };
 
+        //Обработка данных
+        postData(body)
+        .then(successResolve)
+        .then(errorResolve)
+        .catch(error => console.log(error));
       });
 
       form.addEventListener('input', validInputs);
