@@ -5,69 +5,69 @@ window.addEventListener('DOMContentLoaded', () => {
   const menu = document.querySelector('menu');
 
   //таймер
-  const countTimer = deadline => {
-    const timerHours = document.getElementById('timer-hours'),
-      timerMinutes = document.getElementById('timer-minutes'),
-      timerSeconds = document.getElementById('timer-seconds');
+  // const countTimer = deadline => {
+  //   const timerHours = document.getElementById('timer-hours'),
+  //     timerMinutes = document.getElementById('timer-minutes'),
+  //     timerSeconds = document.getElementById('timer-seconds');
 
-    const getTimeRemaining = () => {
-      const dateStop = new Date(deadline).getTime(),
-        dateNow = new Date().getTime(),
-        timeRemaining = (dateStop - dateNow) / 1000,
+  //   const getTimeRemaining = () => {
+  //     const dateStop = new Date(deadline).getTime(),
+  //       dateNow = new Date().getTime(),
+  //       timeRemaining = (dateStop - dateNow) / 1000,
 
-        seconds = Math.floor(timeRemaining % 60),
-        minutes = Math.floor((timeRemaining / 60) % 60),
-        hours = Math.floor(timeRemaining / 3600);
+  //       seconds = Math.floor(timeRemaining % 60),
+  //       minutes = Math.floor((timeRemaining / 60) % 60),
+  //       hours = Math.floor(timeRemaining / 3600);
 
-      if (timeRemaining > 0) {
-        return {
-          timeRemaining,
-          hours,
-          minutes,
-          seconds
-        };
-      } else {
-        return {
-          timeRemaining: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0
-        };
-      }
-    };
+  //     if (timeRemaining > 0) {
+  //       return {
+  //         timeRemaining,
+  //         hours,
+  //         minutes,
+  //         seconds
+  //       };
+  //     } else {
+  //       return {
+  //         timeRemaining: 0,
+  //         hours: 0,
+  //         minutes: 0,
+  //         seconds: 0
+  //       };
+  //     }
+  //   };
 
-    const updateClock = () => {
+  //   const updateClock = () => {
 
-      const {
-        hours,
-        minutes,
-        seconds,
-        timeRemaining
-      } = getTimeRemaining();
+  //     const {
+  //       hours,
+  //       minutes,
+  //       seconds,
+  //       timeRemaining
+  //     } = getTimeRemaining();
 
-      const checkZero = itemTime => {
-        if (itemTime < 10) {
-          return `0${itemTime}`;
-        } else {
-          return itemTime;
-        }
-      };
+  //     const checkZero = itemTime => {
+  //       if (itemTime < 10) {
+  //         return `0${itemTime}`;
+  //       } else {
+  //         return itemTime;
+  //       }
+  //     };
 
-      timerSeconds.textContent = checkZero(seconds);
-      timerMinutes.textContent = checkZero(minutes);
-      timerHours.textContent = checkZero(hours);
+  //     timerSeconds.textContent = checkZero(seconds);
+  //     timerMinutes.textContent = checkZero(minutes);
+  //     timerHours.textContent = checkZero(hours);
 
-      const idInterval = setInterval(updateClock, 1000);
+  //     const idInterval = setInterval(updateClock, 1000);
 
-      if (timeRemaining < 0) {
-        clearInterval(idInterval);
-      }
+  //     if (timeRemaining < 0) {
+  //       clearInterval(idInterval);
+  //     }
 
-    };
-    updateClock();
-  };
+  //   };
+  //   updateClock();
+  // };
 
-  countTimer('23 September  2021');
+  // countTimer('23 September  2021');
 
   //меню
   const toggleMenu = () => {
@@ -492,25 +492,35 @@ window.addEventListener('DOMContentLoaded', () => {
       request.send(JSON.stringify(body));
       };
 
-    //валидация
+    // валидация
     const validInputs = event => {
       const target = event.target;
 
-      const regExpName = /[^а-яё ]/gi,
-        regExpMessag = /[^\W а-яё\d]/gi,
-        regExpPhone = /[^+\d]/g,
-        regExpEmail = /[^a-z @ \- ! _ . ~ * '']/gi;
+      const regExpName = /[^а-яё]/gi,
+        regExpMessag = /^[а-яё\s]+$/g,
+        regExpPhone = /^\+?[78]([-()]*\d){10}$/,
+        regExpEmail = /^\w+@\w+\.\w{2,}$/g,
+        regExpDelSpaceForword = /^(\s*\-*)*/g,
+        regExpDelSpaceBack = /[\s*\-*]*$/g;;
 
-      if (target.name === 'user_name') {
+      if (target.matches('.form-name')) {
+        target.value = target.value.replace(regExpDelSpaceForword, '');
+        target.value = target.value.replace(regExpDelSpaceBack, '');
         target.value = target.value.replace(regExpName, '');
       }
-      if (target.name === 'user_phone') {
+      if (target.matches('.form-phone')) {
+        target.value = target.value.replace(regExpDelSpaceForword, '');
+        target.value = target.value.replace(regExpDelSpaceBack, '');
         target.value = target.value.replace(regExpPhone, '');
       }
-      if (target.name === 'user_email') {
+      if (target.matches('.form-email')) {
+        target.value = target.value.replace(regExpDelSpaceForword, '');
+        target.value = target.value.replace(regExpDelSpaceBack, '');
         target.value = target.value.replace(regExpEmail, '');
       }
-      if (target.name === 'user_message') {
+      if (target.matches('.mess')) {
+        target.value = target.value.replace(regExpDelSpaceForword, '');
+        target.value = target.value.replace(regExpDelSpaceBack, '');
         target.value = target.value.replace(regExpMessag, '');
       }
     };
@@ -550,24 +560,26 @@ window.addEventListener('DOMContentLoaded', () => {
           body[key] = item;
         });
 
+
+
         postData(body,
           () => {
             statusMessage.style.display = 'block';
             statusMessage.textContent = successMessage;
             clearInputs(targetInput);
-            setTimeout(closeMessage, 2000);
+            setTimeout(closeMessage, 3000);
           },
           (error) => {
             statusMessage.style.display = 'block';
             successMessage.textContent = errorMessage;
             console.error(error);
             clearInputs(targetInput);
-            setTimeout(closeMessage, 2000);
+            setTimeout(closeMessage, 3000);
         });
 
       });
 
-      form.addEventListener('input', validInputs);
+      console.log(form.addEventListener('input', validInputs));
     };
 
     workForm('form1');
