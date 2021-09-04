@@ -3,27 +3,28 @@ class Validator {
     this.form = document.querySelector(selector);
     this.pattern = pattern;
     this.method = method;
-    this.elementsForm = [...this.form.elements].filter(item => item.tagName.toLowerCase() !== 'button' && item.type !== 'button');
+    this.elementsForm = [...this.form.elements].filter((el) => {
+      return el.tagName.toLowerCase() !== 'button' && el.type !== 'button';
+    });
     this.error = new Set();
   }
 
   init() {
     this.applyStyle();
     this.setPattern();
-    this.elementsForm.forEach(elem => elem.addEventListener('change', this.chekIt.bind(this)));
+    this.elementsForm.forEach(el => el.addEventListener('input', this.chekIt.bind(this)));
+    /*
     this.form.addEventListener('submit', e => {
-      e.preventDefault();
-      this.elementsForm.forEach(elem => this.chekIt({ target: elem }));
-
+      this.elementsForm.forEach(el => this.chekIt({target: el}));
       if (this.error.size) {
         e.preventDefault();
       }
     });
+    */
   }
 
   isValid(elem) {
-    //паттарны
-    const validatorMethod = {
+    const validarotMetod = {
       notEmpty(elem) {
         if (elem.value.trim() === '') {
           return false;
@@ -32,27 +33,26 @@ class Validator {
       },
       pattern(elem, pattern) {
         return pattern.test(elem.value);
-      }
+      },
     };
 
     if (this.method) {
       const method = this.method[elem.name];
 
       if (method) {
-        return method.every(item => validatorMethod[item[0]](elem, this.pattern[item[1]]));
+        return method.every(item => validarotMetod[item[0]](elem, this.pattern[item[1]]));
+      } else {
+        console.log('передайте name полей');
       }
-    } else {
-      console.log('необходимо передать ID  полей ввода и методы проверки этих полей');
     }
 
     return true;
   }
 
-  //Проверка на валидность
-  chekIt(event) {
-    const target = event.target;
+  chekIt(e) {
+    const target = e.target;
     if (this.isValid(target)) {
-      this.showSucsess(target);
+      this.showSuccess(target);
       this.error.delete(target);
     } else {
       this.showError(target);
@@ -69,12 +69,12 @@ class Validator {
     }
 
     const errorDiv = document.createElement('div');
-    errorDiv.textContent = 'Ошибка тут';
+    errorDiv.textContent = 'Ошибка в этом поле!';
     errorDiv.classList.add('validator-error');
     elem.insertAdjacentElement('afterend', errorDiv);
   }
 
-  showSucsess(elem) {
+  showSuccess(elem) {
     elem.classList.remove('error');
     elem.classList.add('success');
 
@@ -86,112 +86,108 @@ class Validator {
   applyStyle() {
     const style = document.createElement('style');
     style.textContent = `
-    body input.success {
-      border: 2px solid green;
-      background-color: aquamarine
-    }
-    body input.error {
-      border: 2px solid red;
-      background-color: crimson
-    }
-    .validator-error {
-      font-size: 12px;
-      color: red;
-    }
+      body form input.success {
+        border: 2px solid green !important;
+      }
+      body form input.error {
+        border: 2px solid red !important;
+      }
+      .validator-error {
+        bottom: 5px;
+        font-size: 13px;
+        color: red;
+        z-index: 1;
+        position: relative;
+      }
     `;
     document.head.appendChild(style);
   }
 
   setPattern() {
-
     if (!this.pattern.name) {
-      this.pattern.name = /^[А-Яа-яЁё]+$/;
+      this.pattern.name = /^[а-яё]{2,}$/i;
     }
-
     if (!this.pattern.message) {
-      this.pattern.message = /^[А-Яа-яЁё\s]+$/g;
+      this.pattern.message = /^[а-яё\d\.\,\? ! "" ; :]+$/gi;
     }
-
     if (!this.pattern.phone) {
-      this.pattern.phone = /^\+?[78]([-()]*\d){10}$/;
+      this.pattern.phone = /^\+[7](\d){11}$/;
     }
-
     if (!this.pattern.email) {
       this.pattern.email = /^\w+@\w+\.\w{2,}$/;
     }
   }
 }
 
-const validFormOne = new Validator({
-  selector: '#form1',
-  pattern: {
-  },
-  method: {
-    'user_name': [
-      ['notEmpty'],
-      ['pattern', 'name']
-    ],
-    'user_phone': [
-      ['notEmpty'],
-      ['pattern', 'phone']
-    ],
+// const validFormOne = new Validator({
+//   selector: '#form1',
+//   pattern: {
+//   },
+//   method: {
+//     'user_name': [
+//       ['notEmpty'],
+//       ['pattern', 'name']
+//     ],
+//     'user_phone': [
+//       ['notEmpty'],
+//       ['pattern', 'phone']
+//     ],
 
-    'user_email': [
-      ['notEmpty'],
-      ['pattern', 'email']
-    ]
-  }
-});
+//     'user_email': [
+//       ['notEmpty'],
+//       ['pattern', 'email']
+//     ]
+//   }
+// });
 
-const validFormTwo = new Validator({
-  selector: '#form2',
-  pattern: {
-  },
-  method: {
-    'user_name': [
-      ['notEmpty'],
-      ['pattern', 'name']
-    ],
-    'user_phone': [
-      ['notEmpty'],
-      ['pattern', 'phone']
-    ],
+// const validFormTwo = new Validator({
+//   selector: '#form2',
+//   pattern: {
+//   },
+//   method: {
+//     'user_name': [
+//       ['notEmpty'],
+//       ['pattern', 'name']
+//     ],
+//     'user_phone': [
+//       ['notEmpty'],
+//       ['pattern', 'phone']
+//     ],
 
-    'user_email': [
-      ['notEmpty'],
-      ['pattern', 'email']
-    ],
+//     'user_email': [
+//       ['notEmpty'],
+//       ['pattern', 'email']
+//     ],
 
-    'user_message': [
-      ['notEmpty'],
-      ['pattern', 'message']
-    ]
-  }
-});
+//     'user_message': [
+//       ['notEmpty'],
+//       ['pattern', 'message']
+//     ]
+//   }
+// });
 
-const validFormThree = new Validator({
-  selector: '#form3',
-  pattern: {
-  },
-  method: {
-    'user_name': [
-      ['notEmpty'],
-      ['pattern', 'name']
-    ],
-    'user_phone': [
-      ['notEmpty'],
-      ['pattern', 'phone']
-    ],
+// const validFormThree = new Validator({
+//   selector: '#form3',
+//   pattern: {
+//   },
+//   method: {
+//     'user_name': [
+//       ['notEmpty'],
+//       ['pattern', 'name']
+//     ],
+//     'user_phone': [
+//       ['notEmpty'],
+//       ['pattern', 'phone']
+//     ],
 
-    'user_email': [
-      ['notEmpty'],
-      ['pattern', 'email']
-    ],
+//     'user_email': [
+//       ['notEmpty'],
+//       ['pattern', 'email']
+//     ],
 
-  }
-});
+//   }
+// });
 
-validFormOne.init();
-validFormTwo.init();
-validFormThree.init();
-
+// validFormOne.init();
+// validFormTwo.init();
+// validFormThree.init();

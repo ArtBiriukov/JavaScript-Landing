@@ -2,70 +2,71 @@
 window.addEventListener('DOMContentLoaded', () => {
 
   //Глобальные элементы
-  const menu = document.querySelector('menu');
+  const menu = document.querySelector('menu'),
+        popup = document.querySelector('.popup');
 
   //таймер
-  // const countTimer = deadline => {
-  //   const timerHours = document.getElementById('timer-hours'),
-  //     timerMinutes = document.getElementById('timer-minutes'),
-  //     timerSeconds = document.getElementById('timer-seconds');
+  const countTimer = deadline => {
+    const timerHours = document.getElementById('timer-hours'),
+      timerMinutes = document.getElementById('timer-minutes'),
+      timerSeconds = document.getElementById('timer-seconds');
 
-  //   const getTimeRemaining = () => {
-  //     const dateStop = new Date(deadline).getTime(),
-  //       dateNow = new Date().getTime(),
-  //       timeRemaining = (dateStop - dateNow) / 1000,
+    const getTimeRemaining = () => {
+      const dateStop = new Date(deadline).getTime(),
+        dateNow = new Date().getTime(),
+        timeRemaining = (dateStop - dateNow) / 1000,
 
-  //       seconds = Math.floor(timeRemaining % 60),
-  //       minutes = Math.floor((timeRemaining / 60) % 60),
-  //       hours = Math.floor(timeRemaining / 3600);
+        seconds = Math.floor(timeRemaining % 60),
+        minutes = Math.floor((timeRemaining / 60) % 60),
+        hours = Math.floor(timeRemaining / 3600);
 
-  //     if (timeRemaining > 0) {
-  //       return {
-  //         timeRemaining,
-  //         hours,
-  //         minutes,
-  //         seconds
-  //       };
-  //     } else {
-  //       return {
-  //         timeRemaining: 0,
-  //         hours: 0,
-  //         minutes: 0,
-  //         seconds: 0
-  //       };
-  //     }
-  //   };
+      if (timeRemaining > 0) {
+        return {
+          timeRemaining,
+          hours,
+          minutes,
+          seconds
+        };
+      } else {
+        return {
+          timeRemaining: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0
+        };
+      }
+    };
 
-  //   const updateClock = () => {
+    const updateClock = () => {
 
-  //     const {
-  //       hours,
-  //       minutes,
-  //       seconds,
-  //       timeRemaining
-  //     } = getTimeRemaining();
+      const {
+        hours,
+        minutes,
+        seconds,
+        timeRemaining
+      } = getTimeRemaining();
 
-  //     const checkZero = itemTime => {
-  //       if (itemTime < 10) {
-  //         return `0${itemTime}`;
-  //       } else {
-  //         return itemTime;
-  //       }
-  //     };
+      const checkZero = itemTime => {
+        if (itemTime < 10) {
+          return `0${itemTime}`;
+        } else {
+          return itemTime;
+        }
+      };
 
-  //     timerSeconds.textContent = checkZero(seconds);
-  //     timerMinutes.textContent = checkZero(minutes);
-  //     timerHours.textContent = checkZero(hours);
+      timerSeconds.textContent = checkZero(seconds);
+      timerMinutes.textContent = checkZero(minutes);
+      timerHours.textContent = checkZero(hours);
 
-  //     const idInterval = setInterval(updateClock, 1000);
+      const idInterval = setInterval(updateClock, 1000);
 
-  //     if (timeRemaining < 0) {
-  //       clearInterval(idInterval);
-  //     }
+      if (timeRemaining < 0) {
+        clearInterval(idInterval);
+      }
 
-  //   };
-  //   updateClock();
-  // };
+    };
+    updateClock();
+  };
 
   // countTimer('23 September  2021');
 
@@ -96,8 +97,7 @@ window.addEventListener('DOMContentLoaded', () => {
   //Модальное окно
   const popUp = () => {
     const popupBtn = document.querySelectorAll('.popup-btn'),
-      popup = document.querySelector('.popup'),
-      popupContent = document.querySelector('.popup-content');
+    popupContent = document.querySelector('.popup-content');
 
     const animationPopup = () => {
       if (document.documentElement.clientWidth <= 768) {
@@ -107,10 +107,8 @@ window.addEventListener('DOMContentLoaded', () => {
         let start = null;
 
         const step = timestamp => {
-
           if (!start) start = timestamp;
           const progress = timestamp - start;
-
           popup.style.display = 'block';
           popupContent.style.left = progress / 6 + '%';
           if (progress < 240) {
@@ -119,7 +117,6 @@ window.addEventListener('DOMContentLoaded', () => {
         };
 
         window.requestAnimationFrame(step);
-
       }
     };
 
@@ -340,51 +337,66 @@ window.addEventListener('DOMContentLoaded', () => {
     item.addEventListener('input', checkValue);
   });
 
+  //Регулярные выражения для форм
+  const regExpName = /^[а-яё]{2,}$/i,
+        regExpText = /^[а-яё\d\.\,\? ! "" ; :]+$/gim,
+        regExpEmail = /^\w+@\w+\.\w{2,}$/,
+        regExpPhone = /^\+[7](\d){11}$/;
+
+  //проверка полей
+  const checkFilds = (event) => {
+    const target = event.target;
+    if (target.matches('.form-name')) {
+      target.value = target.value.replace(regExpName, '');
+    }
+    if (target.matches('.mess')) {
+      target.value = target.value.replace(regExpText, '');
+    }
+    if (target.matches('.form-email')) {
+      target.value = target.value.replace(regExpEmail, '');
+    }
+    if (target.matches('.form-phone')) {
+      target.value = target.value.replace(regExpPhone, '');
+    }
+  };
+
+  //функция исправления допустимых значений
+  const rebildFilds = (event) => {
+    const target = event.target,
+          regExpTextUp = /( |^)[а-яёa-z]/g,
+          regExpDelSpaceForword = /^(\s*\-*)*/g,
+          regExpDelSpaceBack = /[\s*\-*]*$/g;
+
+    if (target.matches('.form-name')) {
+      target.value = target.value.replace(regExpDelSpaceForword, '');
+      target.value = target.value.replace(regExpDelSpaceBack, '');
+      target.value = target.value.replace(regExpTextUp, x => x.toUpperCase());
+    }
+    if (target.matches('.mess')) {
+      target.value = target.value.replace(regExpDelSpaceForword, '');
+      target.value = target.value.replace(regExpDelSpaceBack, '');
+      target.value = target.value.replace(/\s+/g, ' ');
+      target.value = target.value.replace(/\-+/g, '-');
+    }
+    if (target.matches('.form-email')) {
+      target.value = target.value.replace(/@+/g, '@');
+      target.value = target.value.replace(/\-+/g, '-');
+      target.value = target.value.replace(/\.+/g, '.');
+    }
+    if (target.matches('.form-phone')) {
+      target.value = target.value.replace(regExpDelSpaceForword, '');
+      target.value = target.value.replace(regExpDelSpaceBack, '');
+      target.value = target.value.replace(/\++/g, '+');
+      target.value = target.value.replace(/\-+/g, '-');
+      target.value = target.value.replace(/\(+/g, '(');
+      target.value = target.value.replace(/\)+/g, ')');
+    }
+  };
+
+  //Валидация у инпутов внизу (from2)
   inputFooter.forEach(item => {
-
-    const checkFilds = () => {
-      const regExpText = /[^А-Яа-яёЁ -]/g,
-            regExpEmail = /[^\w@\-\.`\*'!]/g,
-            regExpPhone = /[^\d\(\)\-+]/g;
-
-      if (item.id === 'form2-name' || item.id === 'form2-message') {
-        item.value = item.value.replace(regExpText, '');
-      } else if (item.id === 'form2-email') {
-        item.value = item.value.replace(regExpEmail, '');
-      } else if (item.id === 'form2-phone') {
-        item.value = item.value.replace(regExpPhone, '');
-      }
-    };
-
-    const rebildFilds = () => {
-      const regExpTextUp = /( |^)[а-яёa-z]/g,
-            regExpDelSpaceForword = /^(\s*\-*)*/g,
-            regExpDelSpaceBack = /[\s*\-*]*$/g;
-
-      if (item.id === 'form2-name') {
-        item.value = item.value.replace(regExpDelSpaceForword, '');
-        item.value = item.value.replace(regExpDelSpaceBack, '');
-        item.value = item.value.replace(regExpTextUp, x => x.toUpperCase());
-      } else if (item.id === 'form2-message') {
-          item.value = item.value.replace(regExpDelSpaceForword, '');
-          item.value = item.value.replace(regExpDelSpaceBack, '');
-          item.value = item.value.replace(/\s+/g, ' ');
-          item.value = item.value.replace(/\-+/g, '-');
-      } else if (item.id === 'form2-email') {
-        item.value = item.value.replace(/@+/g, '@');
-        item.value = item.value.replace(/\-+/g, '-');
-        item.value = item.value.replace(/\.+/g, '.');
-      } else if (item.id === 'form2-phone') {
-        item.value = item.value.replace(/\++/g, '+');
-        item.value = item.value.replace(/\-+/g, '-');
-        item.value = item.value.replace(/\(+/g, '(');
-        item.value = item.value.replace(/\)+/g, ')');
-      }
-    };
-
-    // item.addEventListener('input', checkFilds);
-    // item.addEventListener('blur', rebildFilds);
-
+    item.addEventListener('input', checkFilds);
+    item.addEventListener('blur', rebildFilds);
   });
 
   //Калькулятор
@@ -492,38 +504,6 @@ window.addEventListener('DOMContentLoaded', () => {
       request.send(JSON.stringify(body));
       };
 
-    // валидация
-    const validInputs = event => {
-      const target = event.target;
-
-      const regExpName = /[^а-яё]/gi,
-        regExpMessag = /^[а-яё\s]+$/g,
-        regExpPhone = /^\+?[78]([-()]*\d){10}$/,
-        regExpEmail = /^\w+@\w+\.\w{2,}$/g,
-        regExpDelSpaceForword = /^(\s*\-*)*/g,
-        regExpDelSpaceBack = /[\s*\-*]*$/g;;
-
-      if (target.matches('.form-name')) {
-        target.value = target.value.replace(regExpDelSpaceForword, '');
-        target.value = target.value.replace(regExpDelSpaceBack, '');
-        target.value = target.value.replace(regExpName, '');
-      }
-      if (target.matches('.form-phone')) {
-        target.value = target.value.replace(regExpDelSpaceForword, '');
-        target.value = target.value.replace(regExpDelSpaceBack, '');
-        target.value = target.value.replace(regExpPhone, '');
-      }
-      if (target.matches('.form-email')) {
-        target.value = target.value.replace(regExpDelSpaceForword, '');
-        target.value = target.value.replace(regExpDelSpaceBack, '');
-        target.value = target.value.replace(regExpEmail, '');
-      }
-      if (target.matches('.mess')) {
-        target.value = target.value.replace(regExpDelSpaceForword, '');
-        target.value = target.value.replace(regExpDelSpaceBack, '');
-        target.value = target.value.replace(regExpMessag, '');
-      }
-    };
     //отчистка input
     const clearInputs = inputs => {
       inputs.forEach(item => {
@@ -533,16 +513,46 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //убирать сообшение
     const closeMessage = () => {
-      const popUp = document.querySelector('.popup');
-      popUp.style.display = 'none';
+      popup.style.display = 'none';
       statusMessage.remove();
     };
 
     //работа по формам
     const workForm = idForm => {
-      const form = document.getElementById(idForm);
+      const form = document.getElementById(idForm),
+      inputsForm = form.querySelectorAll('input');
+
+
+      const formValid = new Validator({
+        selector: `#${form.id}`,
+        pattern: {
+        },
+        method: {
+          'user_name': [
+            ['notEmpty'],
+            ['pattern', 'name']
+          ],
+          'user_phone': [
+            ['notEmpty'],
+            ['pattern', 'phone']
+          ],
+
+          'user_email': [
+            ['notEmpty'],
+            ['pattern', 'email']
+          ],
+
+          'user_message': [
+            ['notEmpty'],
+            ['pattern', 'message']
+          ]
+        }
+      });
+
+      formValid.init();
 
       form.addEventListener('submit', event => {
+
         event.preventDefault();
 
         const target = event.target,
@@ -559,8 +569,6 @@ window.addEventListener('DOMContentLoaded', () => {
         formData.forEach((item, key) => {
           body[key] = item;
         });
-
-
 
         postData(body,
           () => {
@@ -579,7 +587,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
       });
 
-      console.log(form.addEventListener('input', validInputs));
+      inputsForm.forEach(input => {
+        input.addEventListener('blur', rebildFilds);
+      });
+
     };
 
     workForm('form1');
@@ -590,3 +601,4 @@ window.addEventListener('DOMContentLoaded', () => {
   sendForm();
 
 });
+
