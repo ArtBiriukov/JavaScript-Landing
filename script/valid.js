@@ -108,10 +108,10 @@ class Validator {
       this.pattern.name = /^[а-яё]{2,}$/i;
     }
     if (!this.pattern.message) {
-      this.pattern.message = /^[а-яё\d\.\,\? ! "" ; :]+$/gi;
+      this.pattern.message = /[^a-z]+$/gim;
     }
     if (!this.pattern.phone) {
-      this.pattern.phone = /^\+[7](\d){11}$/;
+      this.pattern.phone = /^\+[7](\d){10}$/;
     }
     if (!this.pattern.email) {
       this.pattern.email = /^\w+@\w+\.\w{2,}$/;

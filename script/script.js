@@ -339,25 +339,53 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //Регулярные выражения для форм
   const regExpName = /^[а-яё]{2,}$/i,
-        regExpText = /^[а-яё\d\.\,\? ! "" ; :]+$/gim,
+        regExpText = /[^a-z]/gi,
         regExpEmail = /^\w+@\w+\.\w{2,}$/,
-        regExpPhone = /^\+[7](\d){11}$/;
+        regExpPhone = /^\+[7](\d){10}$/;
 
   //проверка полей
-  const checkFilds = (event) => {
-    const target = event.target;
-    if (target.matches('.form-name')) {
-      target.value = target.value.replace(regExpName, '');
+  const checkFilds = (target) => {
+
+    const checkGood = () => {
+      target.classList.add('success');
+      target.classList.remove('error');
+    };
+
+    const checkBed = () => {
+      target.classList.add('error');
+      target.classList.remove('success');
+    };
+
+    if (target.name === 'user_name') {
+      if (regExpName.test(target.value)) {
+        checkGood();
+      } else {
+        checkBed();
+      }
     }
-    if (target.matches('.mess')) {
-      target.value = target.value.replace(regExpText, '');
+    if (target.name === 'user_message') {
+      if (regExpText.test(target.value)) {
+        checkGood();
+      } else {
+        checkBed();
+      }
     }
     if (target.matches('.form-email')) {
-      target.value = target.value.replace(regExpEmail, '');
+      if (regExpEmail.test(target.value)) {
+        checkGood();
+      } else {
+        checkBed();
+      }
     }
     if (target.matches('.form-phone')) {
-      target.value = target.value.replace(regExpPhone, '');
+      target.value = target.value.replace(/[^\d\+]+/g, '');
+      if (regExpPhone.test(target.value)) {
+        checkGood();
+      } else {
+        checkBed();
+      }
     }
+
   };
 
   //функция исправления допустимых значений
@@ -367,25 +395,28 @@ window.addEventListener('DOMContentLoaded', () => {
           regExpDelSpaceForword = /^(\s*\-*)*/g,
           regExpDelSpaceBack = /[\s*\-*]*$/g;
 
-    if (target.matches('.form-name')) {
+    const delSpaceForwordBack = () => {
       target.value = target.value.replace(regExpDelSpaceForword, '');
       target.value = target.value.replace(regExpDelSpaceBack, '');
+    };
+
+    if (target.name === 'user_name') {
+      delSpaceForwordBack();
       target.value = target.value.replace(regExpTextUp, x => x.toUpperCase());
     }
-    if (target.matches('.mess')) {
-      target.value = target.value.replace(regExpDelSpaceForword, '');
-      target.value = target.value.replace(regExpDelSpaceBack, '');
+    if (target.name === 'user_message') {
+      delSpaceForwordBack();
       target.value = target.value.replace(/\s+/g, ' ');
       target.value = target.value.replace(/\-+/g, '-');
     }
     if (target.matches('.form-email')) {
+      delSpaceForwordBack();
       target.value = target.value.replace(/@+/g, '@');
       target.value = target.value.replace(/\-+/g, '-');
       target.value = target.value.replace(/\.+/g, '.');
     }
     if (target.matches('.form-phone')) {
-      target.value = target.value.replace(regExpDelSpaceForword, '');
-      target.value = target.value.replace(regExpDelSpaceBack, '');
+      delSpaceForwordBack();
       target.value = target.value.replace(/\++/g, '+');
       target.value = target.value.replace(/\-+/g, '-');
       target.value = target.value.replace(/\(+/g, '(');
@@ -394,10 +425,11 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   //Валидация у инпутов внизу (from2)
-  inputFooter.forEach(item => {
-    item.addEventListener('input', checkFilds);
-    item.addEventListener('blur', rebildFilds);
-  });
+  // inputFooter.forEach(item => {
+  //   item.addEventListener('input', checkFilds);
+  //   item.addEventListener('blur', rebildFilds);
+  // });
+
 
   //Калькулятор
   const calc = (price = 100) => {
@@ -508,6 +540,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const clearInputs = inputs => {
       inputs.forEach(item => {
         item.value = '';
+        item.classList.remove('success');
+        item.classList.remove('error');
       });
     };
 
@@ -522,6 +556,12 @@ window.addEventListener('DOMContentLoaded', () => {
       const form = document.getElementById(idForm),
       inputsForm = form.querySelectorAll('input');
 
+      inputsForm.forEach(input => {
+        input.addEventListener('input', (event) => {
+          checkFilds(event.target);
+        });
+        input.addEventListener('blur', rebildFilds);
+      });
 
       const formValid = new Validator({
         selector: `#${form.id}`,
@@ -549,47 +589,67 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      formValid.init();
+      // formValid.init();
 
       form.addEventListener('submit', event => {
-
-        event.preventDefault();
-
         const target = event.target,
         targetInput = target.querySelectorAll('input');
+        event.preventDefault();
 
-        target.appendChild(statusMessage);
-        statusMessage.classList.add('animate__backInRight');
-        statusMessage.textContent = loadMessage;
+        const checkInputs = () => {
+          let result = false;
 
-        const formData = new FormData(target);
+          targetInput.forEach(item => {
 
-        let body = {};
+            if (item.value === '') {
+              result = false;
+              return;
+            }
 
-        formData.forEach((item, key) => {
-          body[key] = item;
-        });
+            if (item.classList.contains('error')) {
+              result = false;
+              return;
+            }
 
-        postData(body,
-          () => {
-            statusMessage.style.display = 'block';
-            statusMessage.textContent = successMessage;
-            clearInputs(targetInput);
-            setTimeout(closeMessage, 3000);
-          },
-          (error) => {
-            statusMessage.style.display = 'block';
-            successMessage.textContent = errorMessage;
-            console.error(error);
-            clearInputs(targetInput);
-            setTimeout(closeMessage, 3000);
-        });
+            result = true;
 
-      });
+          });
+          return result;
+        };
 
-      inputsForm.forEach(input => {
-        input.addEventListener('blur', rebildFilds);
-      });
+        console.log(checkInputs());
+
+        if (checkInputs()) {
+          target.appendChild(statusMessage);
+          statusMessage.classList.add('animate__backInRight');
+          statusMessage.textContent = loadMessage;
+  
+          const formData = new FormData(target);
+  
+          let body = {};
+  
+          formData.forEach((item, key) => {
+            body[key] = item;
+          });
+  
+          postData(body,
+            () => {
+              statusMessage.style.display = 'block';
+              statusMessage.textContent = successMessage;
+              clearInputs(targetInput);
+              setTimeout(closeMessage, 3000);
+            },
+            (error) => {
+              statusMessage.style.display = 'block';
+              successMessage.textContent = errorMessage;
+              console.error(error);
+              clearInputs(targetInput);
+              setTimeout(closeMessage, 3000);
+          });
+        }
+
+    });
+
 
     };
 
