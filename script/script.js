@@ -597,7 +597,7 @@ window.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         const checkInputs = () => {
-          let result = false;
+          let result = true;
 
           targetInput.forEach(item => {
 
@@ -610,8 +610,6 @@ window.addEventListener('DOMContentLoaded', () => {
               result = false;
               return;
             }
-
-            result = true;
 
           });
           return result;
