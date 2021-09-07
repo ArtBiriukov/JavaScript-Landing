@@ -339,7 +339,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //Регулярные выражения для форм
   const regExpName = /^[а-яё]{2,}$/i,
-        regExpText = /[^a-z]/gi,
+        regExpText = /[^a-z]/gim,
         regExpEmail = /^\w+@\w+\.\w{2,}$/,
         regExpPhone = /^\+[7](\d){10}$/;
 
@@ -357,6 +357,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     if (target.name === 'user_name') {
+      target.value = target.value.replace(/^[a-z]+/gi, '');
       if (regExpName.test(target.value)) {
         checkGood();
       } else {
@@ -378,7 +379,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
     if (target.matches('.form-phone')) {
-      target.value = target.value.replace(/[^\d\+]+/g, '');
+      target.value = target.value.replace(/[^\d\+\-\s\(\)]+/g, '');
       if (regExpPhone.test(target.value)) {
         checkGood();
       } else {
@@ -425,10 +426,12 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   //Валидация у инпутов внизу (from2)
-  // inputFooter.forEach(item => {
-  //   item.addEventListener('input', checkFilds);
-  //   item.addEventListener('blur', rebildFilds);
-  // });
+  inputFooter.forEach(item => {
+    item.addEventListener('input', event => {
+      checkFilds(event.target);
+    });
+    item.addEventListener('blur', rebildFilds);
+  });
 
 
   //Калькулятор
@@ -567,33 +570,7 @@ window.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('blur', rebildFilds);
       });
 
-      const formValid = new Validator({
-        selector: `#${form.id}`,
-        pattern: {
-        },
-        method: {
-          'user_name': [
-            ['notEmpty'],
-            ['pattern', 'name']
-          ],
-          'user_phone': [
-            ['notEmpty'],
-            ['pattern', 'phone']
-          ],
-
-          'user_email': [
-            ['notEmpty'],
-            ['pattern', 'email']
-          ],
-
-          'user_message': [
-            ['notEmpty'],
-            ['pattern', 'message']
-          ]
-        }
-      });
-
-      // formValid.init();
+      maskPhone('.form-phone');
 
       form.addEventListener('submit', event => {
         const target = event.target,
@@ -650,7 +627,6 @@ window.addEventListener('DOMContentLoaded', () => {
           setTimeout(closeMessage, 1000);
         };
 
-
         postData(body)
         .then(successResolve)
         .catch(error => {
@@ -660,8 +636,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
     });
-
-
 
     };
 
