@@ -521,27 +521,14 @@ window.addEventListener('DOMContentLoaded', () => {
     `;
 
     //запрос на сервер
-    const postData = body => new Promise((resolve, reject) => {
-
-      const request = new XMLHttpRequest();
-      request.open('POST', './server.php');
-      request.setRequestHeader('contant-Type', 'application/json');
-
-      request.addEventListener('readystatechange', () => {
-        if (request.readyState !== 4) {
-            return;
-          }
-
-        if (request.status === 200) {
-          resolve();
-        } else {
-          reject(request.status);
-        }
+    const postData = body => fetch('./server.php', {
+        method: "POST",
+        headers: {
+          'contant-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
       });
 
-      request.send(JSON.stringify(body));
-
-    });
 
     //отчистка input
     const clearInputs = inputs => {
@@ -564,12 +551,11 @@ window.addEventListener('DOMContentLoaded', () => {
       inputsForm = form.querySelectorAll('input');
 
       inputsForm.forEach(input => {
-        input.addEventListener('input', (event) => {
+        input.addEventListener('input', event => {
           checkFilds(event.target);
         });
         input.addEventListener('blur', rebildFilds);
       });
-
       maskPhone('.form-phone');
 
       form.addEventListener('submit', event => {
@@ -604,41 +590,43 @@ window.addEventListener('DOMContentLoaded', () => {
           statusMessage.textContent = loadMessage;
 
           const formData = new FormData(target);
-
-          let body = {};
+          const body = {};
 
           formData.forEach((item, key) => {
             body[key] = item;
           });
 
-        //Если все гуд
-        const successResolve = () => {
-          statusMessage.style.display = 'block';
-          statusMessage.textContent = successMessage;
-          clearInputs(targetInput);
-          setTimeout(closeMessage, 1000);
-        };
+          //Если все гуд
+          const successResolve = () => {
+            statusMessage.style.display = 'block';
+            statusMessage.textContent = successMessage;
+            clearInputs(targetInput);
+            setTimeout(closeMessage, 1000);
+          };
 
-        //Если ошибка
-        const errorResolve = () => {
-          statusMessage.style.display = 'block';
-          successMessage.textContent = errorMessage;
-          clearInputs(targetInput);
-          setTimeout(closeMessage, 1000);
-        };
+          //Если ошибка
+          const errorResolve = () => {
+            statusMessage.style.display = 'block';
+            successMessage.textContent = errorMessage;
+            clearInputs(targetInput);
+            setTimeout(closeMessage, 1000);
+          };
 
-        postData(body)
-        .then(successResolve)
-        .catch(error => {
-          errorResolve();
-          console.log(error);
-        });
+          postData(body)
+              .then((response) => {
+              if (response.status !== 200) {
+                throw new Error('status not 200');
+              }
+              successResolve();
+            })
+              .catch(error => {
+            errorResolve();
+            console.log(error);
+            });
+
         }
-
-    });
-
+      });
     };
-
     workForm('form1');
     workForm('form2');
     workForm('form3');
