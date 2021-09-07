@@ -341,7 +341,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const regExpName = /^[а-яё]{2,}$/i,
         regExpText = /[^a-z]/gim,
         regExpEmail = /^\w+@\w+\.\w{2,}$/,
-        regExpPhone = /^\+[7](\d){10}$/;
+        regExpPhone = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
 
   //проверка полей
   const checkFilds = (target) => {
