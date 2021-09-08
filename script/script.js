@@ -2,7 +2,8 @@
 window.addEventListener('DOMContentLoaded', () => {
 
   //Глобальные элементы
-  const menu = document.querySelector('menu');
+  const menu = document.querySelector('menu'),
+        popup = document.querySelector('.popup');
 
   //таймер
   const countTimer = deadline => {
@@ -96,8 +97,7 @@ window.addEventListener('DOMContentLoaded', () => {
   //Модальное окно
   const popUp = () => {
     const popupBtn = document.querySelectorAll('.popup-btn'),
-      popup = document.querySelector('.popup'),
-      popupContent = document.querySelector('.popup-content');
+    popupContent = document.querySelector('.popup-content');
 
     const animationPopup = () => {
       if (document.documentElement.clientWidth <= 768) {
@@ -107,10 +107,8 @@ window.addEventListener('DOMContentLoaded', () => {
         let start = null;
 
         const step = timestamp => {
-
           if (!start) start = timestamp;
           const progress = timestamp - start;
-
           popup.style.display = 'block';
           popupContent.style.left = progress / 6 + '%';
           if (progress < 240) {
@@ -119,7 +117,6 @@ window.addEventListener('DOMContentLoaded', () => {
         };
 
         window.requestAnimationFrame(step);
-
       }
     };
 
@@ -340,52 +337,103 @@ window.addEventListener('DOMContentLoaded', () => {
     item.addEventListener('input', checkValue);
   });
 
+  //Регулярные выражения для форм
+  const regExpName = /^[а-яё]{2,}$/i,
+        regExpText = /^[a-z\$\%\^\&\*\#]*$/gim,
+        regExpEmail = /^\w+@\w+\.\w{2,}$/,
+        regExpPhone = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
+
+  //проверка полей
+  const checkFilds = (target) => {
+
+    const checkGood = () => {
+      target.classList.add('success');
+      target.classList.remove('error');
+    };
+
+    const checkBed = () => {
+      target.classList.add('error');
+      target.classList.remove('success');
+    };
+
+    if (target.name === 'user_name') {
+      target.value = target.value.replace(/^[a-z]+/gi, '');
+      if (regExpName.test(target.value)) {
+        checkGood();
+      } else {
+        checkBed();
+      }
+    }
+    if (target.name === 'user_message') {
+      target.value = target.value.replace(/[^а-яё\!\:\?\;\,\.\s]/gim, '');
+      if (regExpText.test(target.value)) {
+        checkGood();
+      } else {
+        checkBed();
+      }
+    }
+    if (target.matches('.form-email')) {
+      if (regExpEmail.test(target.value)) {
+        checkGood();
+      } else {
+        checkBed();
+      }
+    }
+    if (target.matches('.form-phone')) {
+      target.value = target.value.replace(/[^\d\+\-\s\(\)]+/g, '');
+      if (regExpPhone.test(target.value)) {
+        checkGood();
+      } else {
+        checkBed();
+      }
+    }
+
+  };
+
+  //функция исправления допустимых значений
+  const rebildFilds = (event) => {
+    const target = event.target,
+          regExpTextUp = /( |^)[а-яёa-z]/g,
+          regExpDelSpaceForword = /^(\s*\-*)*/g,
+          regExpDelSpaceBack = /[\s*\-*]*$/g;
+
+    const delSpaceForwordBack = () => {
+      target.value = target.value.replace(regExpDelSpaceForword, '');
+      target.value = target.value.replace(regExpDelSpaceBack, '');
+    };
+
+    if (target.name === 'user_name') {
+      delSpaceForwordBack();
+      target.value = target.value.replace(regExpTextUp, x => x.toUpperCase());
+    }
+    if (target.name === 'user_message') {
+      delSpaceForwordBack();
+      target.value = target.value.replace(/\s+/g, ' ');
+      target.value = target.value.replace(/\-+/g, '-');
+    }
+    if (target.matches('.form-email')) {
+      delSpaceForwordBack();
+      target.value = target.value.replace(/@+/g, '@');
+      target.value = target.value.replace(/\-+/g, '-');
+      target.value = target.value.replace(/\.+/g, '.');
+    }
+    if (target.matches('.form-phone')) {
+      delSpaceForwordBack();
+      target.value = target.value.replace(/\++/g, '+');
+      target.value = target.value.replace(/\-+/g, '-');
+      target.value = target.value.replace(/\(+/g, '(');
+      target.value = target.value.replace(/\)+/g, ')');
+    }
+  };
+
+  //Валидация у инпутов внизу (from2)
   inputFooter.forEach(item => {
-
-    const checkFilds = () => {
-      const regExpText = /[^А-Яа-яёЁ -]/g,
-            regExpEmail = /[^\w@\-\.`\*'!]/g,
-            regExpPhone = /[^\d\(\)\-+]/g;
-
-      if (item.id === 'form2-name' || item.id === 'form2-message') {
-        item.value = item.value.replace(regExpText, '');
-      } else if (item.id === 'form2-email') {
-        item.value = item.value.replace(regExpEmail, '');
-      } else if (item.id === 'form2-phone') {
-        item.value = item.value.replace(regExpPhone, '');
-      }
-    };
-
-    const rebildFilds = () => {
-      const regExpTextUp = /( |^)[а-яёa-z]/g,
-            regExpDelSpaceForword = /^(\s*\-*)*/g,
-            regExpDelSpaceBack = /[\s*\-*]*$/g;
-
-      if (item.id === 'form2-name') {
-        item.value = item.value.replace(regExpDelSpaceForword, '');
-        item.value = item.value.replace(regExpDelSpaceBack, '');
-        item.value = item.value.replace(regExpTextUp, x => x.toUpperCase());
-      } else if (item.id === 'form2-message') {
-          item.value = item.value.replace(regExpDelSpaceForword, '');
-          item.value = item.value.replace(regExpDelSpaceBack, '');
-          item.value = item.value.replace(/\s+/g, ' ');
-          item.value = item.value.replace(/\-+/g, '-');
-      } else if (item.id === 'form2-email') {
-        item.value = item.value.replace(/@+/g, '@');
-        item.value = item.value.replace(/\-+/g, '-');
-        item.value = item.value.replace(/\.+/g, '.');
-      } else if (item.id === 'form2-phone') {
-        item.value = item.value.replace(/\++/g, '+');
-        item.value = item.value.replace(/\-+/g, '-');
-        item.value = item.value.replace(/\(+/g, '(');
-        item.value = item.value.replace(/\)+/g, ')');
-      }
-    };
-
-    item.addEventListener('input', checkFilds);
+    item.addEventListener('input', event => {
+      checkFilds(event.target);
+    });
     item.addEventListener('blur', rebildFilds);
-
   });
+
 
   //Калькулятор
   const calc = (price = 100) => {
@@ -461,81 +509,131 @@ window.addEventListener('DOMContentLoaded', () => {
           loadMessage = 'Загрузка ...',
           successMessage = 'Ваши данные у нас ))';
 
-    const formOne = document.getElementById('form1'),
-          formTwo = document.getElementById('form2'),
-          modalForm = document.getElementById('form3');
-
     const statusMessage = document.createElement('div');
+    statusMessage.classList.add('animate__animated');
     statusMessage.style.cssText = `
-    font-size: 2rem;
-    background-color: steelblue;
-    width: 230px;
-    padding: 10px;
-    border: 2px solid burlywood;
-    border-radius: 25px;
-    margin: 10px auto;
+      font-size: 2rem;
+      background-color: steelblue;
+      width: 230px;
+      padding: 10px;
+      border: 2px solid burlywood;
+      border-radius: 25px;
+      margin: 10px auto;
     `;
 
-    //обработка запроса
-    const statusMessageRequest = (event) => {
-      event.preventDefault();
-
-      const target = event.originalTarget,
-            inputTarget = target.querySelectorAll('input');
-
-      inputTarget.forEach(item => {
-        item.value = '';
-      });
-
-      target.appendChild(statusMessage);
-
-      statusMessage.textContent = loadMessage;
-
-      const formData = new FormData(target);
-      let body = {};
-
-      formData.forEach((item, key) => {
-        body[key] = item;
-      });
-
-      postData(body,
-        () => {
-          statusMessage.textContent = successMessage;
-        },
-        (error) => {
-          successMessage.textContent = errorMessage;
-          console.error(error);
-      });
-
-    };
-
-    formOne.addEventListener('submit', statusMessageRequest);
-    formTwo.addEventListener('submit', statusMessageRequest);
-    modalForm.addEventListener('submit', statusMessageRequest);
-
     //запрос на сервер
-    const postData = (body, outputData, errorData) => {
-      const request = new XMLHttpRequest();
-      request.addEventListener('readystatechange', () => {
-
-        if (request.readyState !== 4) {
-          return;
-        }
-
-        if (request.status === 200) {
-          outputData();
-        } else {
-          errorData(request.status);
-        }
-
+    const postData = body => fetch('./server.php', {
+        method: "POST",
+        headers: {
+          'contant-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
       });
 
-      request.open('POST', './server.php');
-      request.setRequestHeader('contant-Type', 'application/json');
-      request.send(JSON.stringify(body));
+
+    //отчистка input
+    const clearInputs = inputs => {
+      inputs.forEach(item => {
+        item.value = '';
+        item.classList.remove('success');
+        item.classList.remove('error');
+      });
     };
+
+    //убирать сообшение
+    const closeMessage = () => {
+      popup.style.display = 'none';
+      statusMessage.remove();
+    };
+
+    //работа по формам
+    const workForm = idForm => {
+      const form = document.getElementById(idForm),
+      inputsForm = form.querySelectorAll('input');
+
+      inputsForm.forEach(input => {
+        input.addEventListener('input', event => {
+          checkFilds(event.target);
+        });
+        input.addEventListener('blur', rebildFilds);
+      });
+      maskPhone('.form-phone');
+
+      form.addEventListener('submit', event => {
+        const target = event.target,
+        targetInput = target.querySelectorAll('input');
+        event.preventDefault();
+
+        const checkInputs = () => {
+          let result = true;
+
+          targetInput.forEach(item => {
+
+            if (item.value === '') {
+              result = false;
+              return;
+            }
+
+            if (item.classList.contains('error')) {
+              result = false;
+              return;
+            }
+
+          });
+          return result;
+        };
+
+        if (checkInputs()) {
+
+          target.appendChild(statusMessage);
+
+          statusMessage.classList.add('animate__backInRight');
+          statusMessage.textContent = loadMessage;
+
+          const formData = new FormData(target);
+          const body = {};
+
+          formData.forEach((item, key) => {
+            body[key] = item;
+          });
+
+          //Если все гуд
+          const successResolve = () => {
+            statusMessage.style.display = 'block';
+            statusMessage.textContent = successMessage;
+            clearInputs(targetInput);
+            setTimeout(closeMessage, 1000);
+          };
+
+          //Если ошибка
+          const errorResolve = () => {
+            statusMessage.style.display = 'block';
+            successMessage.textContent = errorMessage;
+            clearInputs(targetInput);
+            setTimeout(closeMessage, 1000);
+          };
+
+          postData(body)
+              .then((response) => {
+              if (response.status !== 200) {
+                throw new Error('status not 200');
+              }
+              successResolve();
+            })
+              .catch(error => {
+            errorResolve();
+            console.log(error);
+            });
+
+        }
+      });
+    };
+    workForm('form1');
+    workForm('form2');
+    workForm('form3');
   };
 
   sendForm();
 
 });
+
