@@ -339,7 +339,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //Регулярные выражения для форм
   const regExpName = /^[а-яё]{2,}$/i,
-        regExpText = /^[a-z\$\%\^\&\*\#]*$/gim,
+        regExpText = /[а-яё\s\!\.\,\?\:\;\(\)]+$/gi,
         regExpEmail = /^\w+@\w+\.\w{2,}$/,
         regExpPhone = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
 
@@ -357,7 +357,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     if (target.name === 'user_name') {
-      target.value = target.value.replace(/^[a-z]+/gi, '');
+      target.value = target.value.replace(/[a-z\s]*/gi, '');
       if (regExpName.test(target.value)) {
         checkGood();
       } else {
@@ -365,10 +365,11 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
     if (target.name === 'user_message') {
-      target.value = target.value.replace(/[^а-яё\!\:\?\;\,\.\s]/gim, '');
       if (regExpText.test(target.value)) {
+        console.log(1);
         checkGood();
       } else {
+        console.log(2);
         checkBed();
       }
     }
@@ -427,12 +428,12 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   //Валидация у инпутов внизу (from2)
-  inputFooter.forEach(item => {
-    item.addEventListener('input', event => {
-      checkFilds(event.target);
-    });
-    item.addEventListener('blur', rebildFilds);
-  });
+  // inputFooter.forEach(item => {
+  //   item.addEventListener('input', event => {
+  //     checkFilds(event.target);
+  //   });
+  //   item.addEventListener('blur', rebildFilds);
+  // });
 
 
   //Калькулятор
