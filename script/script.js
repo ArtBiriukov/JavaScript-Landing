@@ -68,7 +68,7 @@ window.addEventListener('DOMContentLoaded', () => {
     updateClock();
   };
 
-  // countTimer('23 September  2021');
+  countTimer('23 September  2021');
 
   //меню
   const toggleMenu = () => {
@@ -339,7 +339,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //Регулярные выражения для форм
   const regExpName = /^[а-яё]{2,}$/i,
-        regExpText = /[^a-z]/gim,
+        regExpText = /^[a-z\$\%\^\&\*\#]*$/gim,
         regExpEmail = /^\w+@\w+\.\w{2,}$/,
         regExpPhone = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
 
@@ -365,6 +365,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
     if (target.name === 'user_message') {
+      target.value = target.value.replace(/[^а-яё\!\:\?\;\,\.\s]/gim, '');
       if (regExpText.test(target.value)) {
         checkGood();
       } else {
