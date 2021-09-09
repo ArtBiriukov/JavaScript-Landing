@@ -3,6 +3,8 @@ const countTimer = deadline => {
     timerMinutes = document.getElementById('timer-minutes'),
     timerSeconds = document.getElementById('timer-seconds');
 
+  let idInterval = 0;
+
   const getTimeRemaining = () => {
     const dateStop = new Date(deadline).getTime(),
       dateNow = new Date().getTime(),
@@ -29,6 +31,14 @@ const countTimer = deadline => {
     }
   };
 
+  const checkZero = itemTime => {
+    if (itemTime < 10) {
+      return `0${itemTime}`;
+    } else {
+      return itemTime;
+    }
+  };
+
   const updateClock = () => {
 
     const {
@@ -38,19 +48,9 @@ const countTimer = deadline => {
       timeRemaining
     } = getTimeRemaining();
 
-    const checkZero = itemTime => {
-      if (itemTime < 10) {
-        return `0${itemTime}`;
-      } else {
-        return itemTime;
-      }
-    };
-
     timerSeconds.textContent = checkZero(seconds);
     timerMinutes.textContent = checkZero(minutes);
     timerHours.textContent = checkZero(hours);
-
-    const idInterval = setInterval(updateClock, 1000);
 
     if (timeRemaining < 0) {
       clearInterval(idInterval);
@@ -58,6 +58,7 @@ const countTimer = deadline => {
 
   };
   updateClock();
+  idInterval = setInterval(updateClock, 1000);
 };
 
 export default countTimer;

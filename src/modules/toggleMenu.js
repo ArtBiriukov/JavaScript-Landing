@@ -8,7 +8,8 @@ const toggleMenu = () => {
   document.addEventListener('click', event => {
     let target = event.target;
 
-    if (target.matches('ul>li>a, .close-btn') || target.closest('.menu')) {
+    if (target.matches('ul>li>a') || target.closest('.menu') || target.classList.contains('close-btn')) {
+      event.preventDefault();
       handlerMenu();
     } else {
 
