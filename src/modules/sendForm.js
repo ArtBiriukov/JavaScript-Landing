@@ -20,14 +20,24 @@ const sendForm = () => {
   `;
 
   //запрос на сервер
-  const postData = body => fetch('./server.php', {
-    method: "POST",
-    headers: {
-      'contant-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
 
+  async function postData(body) {
+    let response = await fetch('./server.php', {
+      method: "POST",
+      headers: {
+        'contant-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+  }
+  
+  // const postData = body => fetch('./server.php', {
+  //   method: "POST",
+  //   headers: {
+  //     'contant-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(body)
+  // });
 
   //отчистка input
   const clearInputs = inputs => {
