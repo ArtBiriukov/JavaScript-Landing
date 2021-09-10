@@ -6,11 +6,13 @@ module.exports = {
   devServer: {
     static: {
       directory: path.join(__dirname, ''),
+      watch: true,
     },
     open: true,
     compress: true,
     hot: true,
     port: 9000,
+    liveReload: true,
   },
   module: {
     rules: [
