@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+<<<<<<< HEAD
     "build": "webpack --config webpack.prod.config.js",
     "dev": "webpack serve --config webpack.dev.config.js"
   },
+=======
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  
+>>>>>>> les30
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ArtBiryukov/LandingJS.git"
