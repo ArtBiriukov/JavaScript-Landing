@@ -11,7 +11,7 @@ import photoAt from './modules/photoAt';
 import calcValid from './modules/calcValid';
 
 //таймер
-countTimer('23 September  2021');
+countTimer('23 September  2022');
 //меню
 toggleMenu();
 //Модальное окно

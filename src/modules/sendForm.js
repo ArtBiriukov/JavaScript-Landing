@@ -127,6 +127,7 @@ const sendForm = () => {
       }
     });
   };
+
   workForm('form1');
   workForm('form2');
   workForm('form3');

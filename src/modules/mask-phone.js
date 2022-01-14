@@ -21,7 +21,6 @@ function maskPhone(selector, masked = '+7 (___) ___-__-__') {
     if (event.type == "blur" && this.value.length < 5) {
       this.value = "";
     }
-
   }
 
   for (const elem of elems) {
@@ -31,9 +30,6 @@ function maskPhone(selector, masked = '+7 (___) ___-__-__') {
   }
 
 }
-
-// use
-
 export default maskPhone;
 
 maskPhone('селектор элементов', 'маска, если маску не передать то будет работать стандартная +7 (___) ___-__-__');

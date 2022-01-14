@@ -84,7 +84,7 @@ const slider = () => {
     }
   });
 
-  startSlide(1500);
+  startSlide(3000);
 
 };
 
