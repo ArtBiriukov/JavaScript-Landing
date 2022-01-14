@@ -12,10 +12,10 @@
   "rules": {
     "indent": [
       "error",
-      4
+      2
     ],
     "linebreak-style": [
-      "error",
+      "unix",
       "windows"
     ],
     "semi": [
@@ -89,7 +89,7 @@
     "max-len": [
       "error",
       {
-        "code": 120,
+        "code": 140,
         "ignoreUrls": true
       }
     ],
